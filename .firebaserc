@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ingenieriadesoftware-3a3a8": {
+      "hosting": {
+        "Tesis": [
+          "ingenieriadesoftware-3a3a8"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ingenieriadesoftware-3a3a8"
+  }
+}
