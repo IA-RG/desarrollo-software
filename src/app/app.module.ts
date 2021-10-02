@@ -19,7 +19,7 @@ import firebase from 'firebase/app';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularFireModule,
+    AngularFireModule.initializeApp(environment.firebase),
     ReactiveFormsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
