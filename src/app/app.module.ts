@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 import firebase from 'firebase/app';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -24,6 +26,8 @@ import firebase from 'firebase/app';
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    BrowserAnimationsModule,
+    FontAwesomeModule,
   ],
   providers: [
   ],
