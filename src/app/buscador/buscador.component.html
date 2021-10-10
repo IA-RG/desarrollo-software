@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <app-formulario
+    [formulario]="formulario"
+    (emisorDeDatos)="capturarDatos($event)"
+    [accionDeBoton]="'Buscar'"
+  ></app-formulario>
+  <div *ngFor="let tesis of resultado">
+    <a [href]="tesis.enlaceATesis">{{ tesis.titulo }}, {{tesis.year}}</a>
+    <button *ngIf="!tesis.mostrarContenido" (click)="mostrarContenido(tesis,true)"><fa-icon [icon]="faChevronDown" size=2x></fa-icon
+      ></button>
+      <button *ngIf="tesis.mostrarContenido" (click)="mostrarContenido(tesis,false)"><fa-icon [icon]="faChevronUp" size=2x></fa-icon
+        ></button>
+    <div class="contenido" *ngIf="tesis.mostrarContenido">
+    <div>
+      autores:
+      <span *ngFor="let autor of tesis.autores">{{ autor }},</span>
+    </div>
+    <div>
+      directores:
+      <span *ngFor="let director of tesis.directores">{{ director }},</span>
+    </div>
+    <div>
+      sinodales:
+      <span *ngFor="let sinodal of tesis.sinodales">{{ sinodal }},</span>
+    </div>
+    <div>
+      carrera:{{tesis.carrera}}
+    </div>
+    <div>
+      grado:{{tesis.grado}}
+    </div>
+    <div>
+      resumen:{{tesis.resumen}}
+    </div>
+  </div>
+  </div>
+</div>

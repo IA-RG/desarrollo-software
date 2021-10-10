@@ -1,0 +1,40 @@
+<div>
+  <h1 class="fw-bold display-5 text-center mt-2 mb-0">{{formulario.titulo}}</h1>
+  <form
+    (ngSubmit)="emitirDatos()"
+    [formGroup]="formulario.controladorDeFormulario"
+  >
+    <div *ngFor="let pregunta of formulario.formulario" class="form-row">
+      <app-pregunta
+        [pregunta]="pregunta"
+        [controladorDeFormulario]="formulario.controladorDeFormulario"
+        (emisorDeArchivos)="capturarArchivo($event)"
+      ></app-pregunta>
+    </div>
+    <div class="form-row" *ngIf="formulario.grupoDeCheckbox.length!=0">
+      <p>Buscar en:</p>
+      <div class="btn-group">
+        
+        <app-pregunta
+          *ngFor="let pregunta of formulario.grupoDeCheckbox"
+          [pregunta]="pregunta"
+          [controladorDeFormulario]="formulario.controladorDeFormulario"
+          (emisorDeArchivos)="capturarArchivo($event)"
+        ></app-pregunta>
+      </div>
+    </div>
+
+    <div class="form-row my-3">
+      <div class="text-center">
+        <button
+          type="submit"
+          value="generar"
+          class="btn btn-lg btn-primary mx-3"
+          [disabled]="!formulario.controladorDeFormulario.valid"
+        >
+          {{accionDeBoton}}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

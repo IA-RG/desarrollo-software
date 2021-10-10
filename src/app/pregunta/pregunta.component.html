@@ -1,0 +1,50 @@
+<div [formGroup]="controladorDeFormulario">
+  
+  <label *ngIf="checkbox" [attr.for]="pregunta.key" class="form-label">{{
+    pregunta.label
+  }}</label>
+
+  <div [ngSwitch]="pregunta.controlType">
+    <div *ngSwitchCase="'checkbox'">
+      <input
+        type="checkbox"
+        [id]="pregunta.key"
+        [formControlName]="pregunta.key"
+        class="btn-check"
+      />
+      <label class="btn btn-outline-primary" [for]="pregunta.key">{{
+        pregunta.label
+      }}</label>
+    </div>
+    <div class="input-group" *ngSwitchCase="'text'">
+      <input
+        [id]="pregunta.key"
+        [type]="pregunta.type"
+        [formControlName]="pregunta.key"
+        class="form-control form-control-sm enfoque-rojo"
+        [disabled]="pregunta.disabled"
+        [value]="pregunta.value"
+      />
+    </div>
+    <div class="input-group" *ngSwitchCase="'file'">
+      <input
+        [id]="pregunta.key"
+        [type]="pregunta.type"
+        [formControlName]="pregunta.key"
+        class="form-control form-control-sm enfoque-rojo"
+        (change)="emitirArchivo($event)"
+      />
+    </div>
+    <div class="input-group" *ngSwitchCase="'dropdown'">
+      <select
+        class="form-select form-select-sm enfoque-rojo"
+        [id]="pregunta.key"
+        [formControlName]="pregunta.key"
+      >
+        <option *ngFor="let opt of pregunta.options" [value]="opt.value">
+          {{ opt.value }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>

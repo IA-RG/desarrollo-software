@@ -12,11 +12,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import firebase from 'firebase/app';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormularioComponent } from './formulario/formulario.component';
+import { PreguntaComponent } from './pregunta/pregunta.component';
+import { BuscadorComponent } from './buscador/buscador.component';
+import { AdministradorDeTesisComponent } from './administrador-de-tesis/administrador-de-tesis.component';
+import { RegistradorDeTesisComponent } from './registrador-de-tesis/registrador-de-tesis.component';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FormularioComponent,
+    PreguntaComponent,
+    BuscadorComponent,
+    AdministradorDeTesisComponent,
+    RegistradorDeTesisComponent,
   ],
   imports: [
     BrowserModule,
