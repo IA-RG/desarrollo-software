@@ -8,7 +8,7 @@ import { Pregunta } from '../shared/classes/Pregunta';
   styleUrls: ['./pregunta.component.css'],
 })
 export class PreguntaComponent implements OnInit {
-  @Input() pregunta!: Pregunta<string | boolean>;
+  @Input() pregunta!: Pregunta<string | number | boolean>;
   @Input() controladorDeFormulario!: FormGroup;
   @Output() emisorDeArchivos = new EventEmitter<File>();
   private _checkbox:boolean=false;

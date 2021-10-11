@@ -26,6 +26,19 @@
         [value]="pregunta.value"
       />
     </div>
+    <div class="input-group" *ngSwitchCase="'number'">
+      <input
+        [id]="pregunta.key"
+        [type]="pregunta.type"
+        [formControlName]="pregunta.key"
+        class="form-control form-control-sm enfoque-rojo"
+        [disabled]="pregunta.disabled"
+        [value]="pregunta.value"
+        [min] = "pregunta.minimo"
+        [max] = "pregunta.maximo"
+        [step] = "pregunta.step"
+      />
+    </div>
     <div class="input-group" *ngSwitchCase="'file'">
       <input
         [id]="pregunta.key"
@@ -46,5 +59,6 @@
         </option>
       </select>
     </div>
+
   </div>
 </div>

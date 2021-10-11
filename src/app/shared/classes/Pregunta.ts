@@ -7,6 +7,9 @@ export class Pregunta<T> {
   private _controlType: string;
   private _type: string;
   private _disabled: boolean;
+  private _min : number;
+  private _max : number;
+  private _step : number;
   private _options: { key: string; value: string }[];
 
   constructor(
@@ -19,6 +22,9 @@ export class Pregunta<T> {
       controlType?: string;
       type?: string;
       disabled?: boolean;
+      minimo?: number;
+      maximo?: number;
+      step?: number;
       options?: { key: string; value: string }[];
     } = {}
   ) {
@@ -30,6 +36,9 @@ export class Pregunta<T> {
     this._controlType = options.controlType || '';
     this._type = options.type || '';
     this._disabled = options.disabled || false;
+    this._min = options.minimo || 0;
+    this._max = options.maximo || 0;
+    this._step = options.step || 0;
     this._options = options.options || [];
   }
 
@@ -68,4 +77,18 @@ export class Pregunta<T> {
   public get required(): boolean {
     return this._required;
   }
+  
+  public get minimo() : number {
+    return this._min;
+  }
+  
+  public get maximo() : number {
+    return this._max;
+  }
+  
+  public get step() : number {
+    return this._step;
+  }
+  
+  
 }
