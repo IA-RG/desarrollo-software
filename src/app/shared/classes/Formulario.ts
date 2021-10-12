@@ -4,11 +4,11 @@ import { PreguntaCheckBox } from './PreguntaDeFiltro';
 
 export class Formulario {
   private _controladorDeFormulario: FormGroup;
-  private _formulario: Pregunta<string | boolean>[];
+  private _formulario: Pregunta<string | boolean |  number>[];
   private _titulo: string;
-  private _grupoDeCheckbox: Pregunta<string | boolean>[] = [];
+  private _grupoDeCheckbox: Pregunta<string | boolean |number>[] = [];
 
-  constructor(formulario: Pregunta<string | boolean>[], titulo: string) {
+  constructor(formulario: Pregunta<string | boolean |number>[], titulo: string) {
     this._formulario = formulario;
     this._controladorDeFormulario =
       this.asociarFormularioAControlador(formulario);
@@ -21,7 +21,7 @@ export class Formulario {
         this._grupoDeCheckbox.push(pregunta);
       }
     });
-    const contieneCheckbox = (pregunta: Pregunta<string | boolean>) =>
+    const contieneCheckbox = (pregunta: Pregunta<string | boolean |number>) =>
       pregunta.controlType === 'checkbox';
     while (this._formulario.some(contieneCheckbox)) {
       this._formulario.forEach((pregunta) => {
@@ -34,7 +34,7 @@ export class Formulario {
   }
 
   private asociarFormularioAControlador(
-    formulario: Pregunta<string | boolean>[]
+    formulario: Pregunta<string | boolean |number>[]
   ): FormGroup {
     const group: any = {};
 
@@ -50,14 +50,14 @@ export class Formulario {
     return this._controladorDeFormulario.getRawValue();
   }
 
-  public get grupoDeCheckbox(): Pregunta<string | boolean>[] {
+  public get grupoDeCheckbox(): Pregunta<string | boolean |number>[] {
     return this._grupoDeCheckbox;
   }
   public get titulo(): string {
     return this._titulo;
   }
 
-  public get formulario(): Pregunta<string | boolean>[] {
+  public get formulario(): Pregunta<string | boolean |number>[] {
     return this._formulario;
   }
 
