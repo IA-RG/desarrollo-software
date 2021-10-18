@@ -1,0 +1,93 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Tesis } from '../classes/Tesis';
+import { VersionDeArchivo } from '../classes/VersionDeArchivo';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DataService {
+  constructor(private db: AngularFirestore,private http:HttpClient) {}
+
+  getProfesor()
+  {
+    return this.http.get("http://localhost:3000/profesor");
+  }
+
+  buscarProfesor(profe2:string)
+  {
+    const term = profe2.trim();
+
+  const options = term ? { params: new HttpParams().set('profe', term) } : {};
+    return this.http.get(`http://localhost:3000/profesor/${profe2}`,options);
+  }
+
+  buscarTesis(formData: any): Tesis[] {
+    const resultado: Tesis[] = [];
+    if (formData.autores)
+      this.db
+        .collection('tesis', (ref) =>
+          ref.where('autores', 'array-contains-any', [`${formData.consulta}`])
+        )
+        .get()
+        .toPromise()
+        .then((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            const tesis = this.toTesis(doc.data());
+            if (!resultado.includes(tesis)) {
+              resultado.push(tesis);
+            }
+          });
+          console.log(resultado);
+        });
+    if (formData.carrera)
+      this.db
+        .collection('tesis', (ref) =>
+          ref.where('carrera', 'array-contains-any', [`${formData.consulta}`])
+        )
+        .get()
+        .toPromise()
+        .then((snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            const tesis = this.toTesis(doc.data());
+            if (!resultado.includes(tesis)) {
+              resultado.push(tesis);
+            }
+          });
+          console.log(resultado);
+        });
+    if (formData.directores)
+      if (formData.grado)
+        if (formData.palabrasClave)
+          if (formData.resumen)
+            if (formData.sinodales)
+              if (formData.titulo)
+                if (formData.year) {
+                }
+    return resultado;
+  }
+
+  toTesis(doc: any) {
+    const versiones: VersionDeArchivo[] = [];
+    doc.versiones.forEach((version: any) => {
+      versiones.push(
+        new VersionDeArchivo(version.marcaDeTiempo, version.enlaceATesis)
+      );
+    });
+    return new Tesis(
+      doc.numeroDeTT,
+      doc.titulo,
+      doc.autores,
+      doc.directores,
+      doc.sinodales,
+      doc.enlaceATesis,
+      versiones,
+      doc.palabrasClave,
+      doc.year,
+      doc.carrera,
+      doc.grado,
+      doc.resumen
+    );
+  }
+}

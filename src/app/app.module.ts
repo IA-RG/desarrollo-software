@@ -17,6 +17,8 @@ import { PreguntaComponent } from './pregunta/pregunta.component';
 import { BuscadorComponent } from './buscador/buscador.component';
 import { AdministradorDeTesisComponent } from './administrador-de-tesis/administrador-de-tesis.component';
 import { RegistradorDeTesisComponent } from './registrador-de-tesis/registrador-de-tesis.component';
+import { DataService } from './shared/services/DataService.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -39,8 +41,9 @@ import { RegistradorDeTesisComponent } from './registrador-de-tesis/registrador-
     AngularFireStorageModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
+    HttpClientModule
   ],
-  providers: [
+  providers: [DataService
   ],
   bootstrap: [AppComponent]
 })

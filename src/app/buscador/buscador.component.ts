@@ -6,6 +6,7 @@ import { Tesis } from '../shared/classes/Tesis';
 import { VersionDeArchivo } from '../shared/classes/VersionDeArchivo';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { DataService } from '../shared/services/DataService.service';
 
 @Component({
   selector: 'app-buscador',
@@ -19,8 +20,9 @@ export class BuscadorComponent implements OnInit {
   private _formulario: Formulario;
   private _faChevronDown = faChevronDown;
   private _faChevronUp = faChevronUp;
+  profesores: any;
 
-  constructor() {
+  constructor(private dataService:DataService) {
     const formulario: Pregunta<string | boolean>[] = [
       new Pregunta<string>({
         key: 'consulta',
@@ -105,36 +107,42 @@ export class BuscadorComponent implements OnInit {
     ];
     this._formulario = new Formulario(formulario, 'Búsqueda de tesis');
     this._formulario.obtenerGrupo();
-    this._resultado = [
-      new Tesis(
-        'TT212',
-        'Sistema de trámites',
-        ['alan', 'pedro', 'Sinahí'],
-        ['juan'],
-        ['casandra'],
-        'a',
-        [new VersionDeArchivo('hoy', 'a')],
-        ['tramites', 'sistema'],
-        2021,
-        'sistemas',
-        'licenciatura',
-        'resumen'
-      ),
-      new Tesis(
-        'TT212',
-        'Sistema de mapas',
-        ['alan', 'pedro', 'Sinahí'],
-        ['juan'],
-        ['casandra'],
-        'a',
-        [new VersionDeArchivo('hoy', 'a')],
-        ['tramites', 'sistema'],
-        2021,
-        'sistemas',
-        'licenciatura',
-        'resumen'
-      ),
-    ];
+    // this.dataService.getProfesor().subscribe((profes)=>{this.profesores=profes;
+    // console.log(this.profesores);
+    // });
+    this.dataService.buscarProfesor("Casa").subscribe((profes)=>{this.profesores=profes;
+      console.log(this.profesores);
+      });
+    // this._resultado = [
+    //   new Tesis(
+    //     'TT212',
+    //     'Sistema de trámites',
+    //     ['alan', 'pedro', 'Sinahí'],
+    //     ['juan'],
+    //     ['casandra'],
+    //     'a',
+    //     [new VersionDeArchivo('hoy', 'a')],
+    //     ['tramites', 'sistema'],
+    //     2021,
+    //     'sistemas',
+    //     'licenciatura',
+    //     'resumen'
+    //   ),
+    //   new Tesis(
+    //     'TT212',
+    //     'Sistema de mapas',
+    //     ['alan', 'pedro', 'Sinahí'],
+    //     ['juan'],
+    //     ['casandra'],
+    //     'a',
+    //     [new VersionDeArchivo('hoy', 'a')],
+    //     ['tramites', 'sistema'],
+    //     2021,
+    //     'sistemas',
+    //     'licenciatura',
+    //     'resumen'
+    //   ),
+    // ];
   }
 
   ngOnInit(): void {}
@@ -145,6 +153,9 @@ export class BuscadorComponent implements OnInit {
 
   capturarDatos(datos: { formData: object; file: File | null }) {
     console.log(datos);
+    this._resultado=this.dataService.buscarTesis(datos.formData);
+    console.log(this._resultado);
+    
   }
 
   public get faChevronUp() {
