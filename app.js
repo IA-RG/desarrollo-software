@@ -1,7 +1,10 @@
 const mysql = require("mysql2");
 const express = require("express");
-const consultas = require("./functions/consultas2");
+const body = require("body-parser");
+const cors = require("cors");
 
+
+const consultas = require("./functions/consultas2");
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -12,6 +15,10 @@ const connection = mysql.createConnection({
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use(body.json());
+app.use(body.urlencoded({extended:true}));
+app.use(cors());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
@@ -54,7 +61,7 @@ app.get("/profesor/:profe", (req, res) => {
   console.log(req.params.profe);
   const profe = req.params.profe;
   connection.query(
-    `select * from profesor as p where p.nombre like '%${consulta}%'`,
+    `select * from profesor as p where p.nombre like '%${pofe}%'`,
     (err, result, fields) => {
       if (err) {
         console.log(err);
@@ -170,6 +177,12 @@ app.get("/busqueda/:busqueda", (req, res) => {
       res.status(200).send(JSON.stringify(tesis));
     }
   });
+});
+
+app.post("/tesis", (req, res)=>{
+  console.log("DENTRO");
+  console.log(req.body);
+  res.status(200).send(JSON.stringify("OK"));
 });
 
 app.listen(3000, function () {
