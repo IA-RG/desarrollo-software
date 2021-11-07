@@ -23,58 +23,64 @@ export class DataService {
     return this.http.get(`http://localhost:3000/profesor/${profe2}`,options);
   }
 
-  buscarTesis(formData: any): Tesis[] {
-    const resultado: Tesis[] = [];
-    if (formData.autores)
-      this.db
-        .collection('tesis', (ref) =>
-          ref.where('autores', 'array-contains-any', [`${formData.consulta}`])
-        )
-        .get()
-        .toPromise()
-        .then((snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            const tesis = this.toTesis(doc.data());
-            if (!resultado.includes(tesis)) {
-              resultado.push(tesis);
-            }
-          });
-          console.log(resultado);
-        });
-    if (formData.carrera)
-      this.db
-        .collection('tesis', (ref) =>
-          ref.where('carrera', 'array-contains-any', [`${formData.consulta}`])
-        )
-        .get()
-        .toPromise()
-        .then((snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            const tesis = this.toTesis(doc.data());
-            if (!resultado.includes(tesis)) {
-              resultado.push(tesis);
-            }
-          });
-          console.log(resultado);
-        });
-    if (formData.directores)
-      if (formData.grado)
-        if (formData.palabrasClave)
-          if (formData.resumen)
-            if (formData.sinodales)
-              if (formData.titulo)
-                if (formData.year) {
-                }
-    return resultado;
+  buscarTesis(formData: any) {
+    const data=JSON.stringify(formData);
+    return this.http.get(`http://localhost:3000/busqueda/${data}`);
   }
+
+  // buscarTesis(formData: any): Tesis[] {
+  //   const resultado: Tesis[] = [];
+  //   if (formData.autores)
+  //     this.db
+  //       .collection('tesis', (ref) =>
+  //         ref.where('autores', 'array-contains-any', [`${formData.consulta}`])
+  //       )
+  //       .get()
+  //       .toPromise()
+  //       .then((snapshot) => {
+  //         snapshot.docs.forEach((doc) => {
+  //           const tesis = this.toTesis(doc.data());
+  //           if (!resultado.includes(tesis)) {
+  //             resultado.push(tesis);
+  //           }
+  //         });
+  //         console.log(resultado);
+  //       });
+  //   if (formData.carrera)
+  //     this.db
+  //       .collection('tesis', (ref) =>
+  //         ref.where('carrera', 'array-contains-any', [`${formData.consulta}`])
+  //       )
+  //       .get()
+  //       .toPromise()
+  //       .then((snapshot) => {
+  //         snapshot.docs.forEach((doc) => {
+  //           const tesis = this.toTesis(doc.data());
+  //           if (!resultado.includes(tesis)) {
+  //             resultado.push(tesis);
+  //           }
+  //         });
+  //         console.log(resultado);
+  //       });
+  //   if (formData.directores)
+  //     if (formData.grado)
+  //       if (formData.palabrasClave)
+  //         if (formData.resumen)
+  //           if (formData.sinodales)
+  //             if (formData.titulo)
+  //               if (formData.year && ) {
+  //               }
+  //   return resultado;
+  // }
 
   toTesis(doc: any) {
     const versiones: VersionDeArchivo[] = [];
-    doc.versiones.forEach((version: any) => {
+    doc.versiones?.forEach((version: any) => {
       versiones.push(
         new VersionDeArchivo(version.marcaDeTiempo, version.enlaceATesis)
       );
     });
+    const numeroDeTT=`TT${doc.id}`
     return new Tesis(
       doc.numeroDeTT,
       doc.titulo,
@@ -82,7 +88,7 @@ export class DataService {
       doc.directores,
       doc.sinodales,
       doc.enlaceATesis,
-      versiones,
+      // versiones,
       doc.palabrasClave,
       doc.year,
       doc.carrera,
