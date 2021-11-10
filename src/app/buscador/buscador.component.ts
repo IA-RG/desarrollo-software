@@ -22,7 +22,7 @@ export class BuscadorComponent implements OnInit {
   private _faChevronUp = faChevronUp;
   profesores: any;
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService:DataService) {
     const formulario: Pregunta<string | boolean>[] = [
       new Pregunta<string>({
         key: 'consulta',
@@ -110,10 +110,9 @@ export class BuscadorComponent implements OnInit {
     // this.dataService.getProfesor().subscribe((profes)=>{this.profesores=profes;
     // console.log(this.profesores);
     // });
-    this.dataService.buscarProfesor('Casa').subscribe((profes) => {
-      this.profesores = profes;
+    this.dataService.buscarProfesor("Casa").subscribe((profes)=>{this.profesores=profes;
       console.log(this.profesores);
-    });
+      });
     // this._resultado = [
     //   new Tesis(
     //     'TT212',
@@ -154,13 +153,9 @@ export class BuscadorComponent implements OnInit {
 
   capturarDatos(datos: { formData: object; file: File | null }) {
     console.log(datos);
-    this.dataService.buscarTesis(datos.formData).subscribe((res: any) => {
-      console.log(res.tesis);
-      this._resultado = [];
-      res.tesis.forEach((tesis: any) => {
-        this._resultado.push(this.dataService.toTesis(tesis));
-      });
-    });
+    this._resultado=this.dataService.buscarTesis(datos.formData);
+    console.log(this._resultado);
+    
   }
 
   public get faChevronUp() {

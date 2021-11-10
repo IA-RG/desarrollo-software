@@ -8,7 +8,7 @@ export class Tesis {
   private _directores: string[];
   private _sinodales: string[];
   private _enlaceATesis: string;
-  // private _versiones: VersionDeArchivo[];
+  private _versiones: VersionDeArchivo[];
   private _palabrasClave: string[];
   private _year: number;
   private _carrera: string;
@@ -24,7 +24,7 @@ export class Tesis {
     directores: string[],
     sinodales: string[],
     enlaceATesis: string,
-    // versiones: VersionDeArchivo[],
+    versiones: VersionDeArchivo[],
     palabrasClave: string[],
     year: number,
     carrera: string,
@@ -40,7 +40,7 @@ export class Tesis {
     this._directores = directores;
     this._sinodales = sinodales;
     this._enlaceATesis = enlaceATesis;
-    // this._versiones = versiones;
+    this._versiones = versiones;
     this._palabrasClave = palabrasClave;
     this._year = year;
     this._carrera = carrera;
@@ -73,9 +73,9 @@ export class Tesis {
     return this._palabrasClave;
   }
 
-  // public get versiones(): VersionDeArchivo[] {
-  //   return this._versiones;
-  // }
+  public get versiones(): VersionDeArchivo[] {
+    return this._versiones;
+  }
 
   public get enlaceATesis(): string {
     return this._enlaceATesis;
