@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFireStorage } from '@angular/fire/storage';
-import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { Formulario } from '../shared/classes/Formulario';
 import { Pregunta } from '../shared/classes/Pregunta';
@@ -258,6 +257,17 @@ export class RegistradorDeTesisComponent implements OnInit {
       this.mostrar = false;
       this.val = 2;
       this.pruebaFIRE();
+      window.scrollTo(0, 0);
+      const elemento = <HTMLElement>document.getElementById("form");
+      elemento.style.display = 'none';
+      window.setTimeout(()=>{
+        const contenedor = <HTMLElement>document.getElementById("contenedor_carga");
+        const spinner = <HTMLElement>document.getElementById("carga");
+        spinner.style.display = 'none';
+        const mostrarControles = <HTMLElement>document.getElementById("controles");
+        mostrarControles.style.display = 'flex';
+      }, 4000);
+
       //antes debemos de almacenar el archivo
       //console.log("enlace",this._nArchivo)
 
@@ -306,32 +316,16 @@ export class RegistradorDeTesisComponent implements OnInit {
     this.limpiaMensajes();*/
     task.snapshotChanges().pipe(finalize(async () => {
       this.enlace.push(
-        await fileRef.getDownloadURL().toPromise().catch((error) => { }).catch((error) => { })
+        await fileRef.getDownloadURL().toPromise().catch((error) => {}).catch((error) => {})
       );
-      this.progress.push((await task).bytesTransferred);
-      //console.log(((await task).bytesTransferred/(await task).totalBytes) * 100);
-      console.log(this.progress);
-      console.log(this.enlace);
+      //console.log(this.enlace);
       let cadena = this.enlace[i];
       this._nArchivo = cadena;
-      /********************************************************* */
-      /*setInterval(() => {
-        setInterval(() => {
-          this.muestraSpinner(true);
-          //esperamos dos segundos para ejecutar la función de muestram spinner
-        }, 2000);
-      }, 2000)*/
-      /********************************************************* */
-
       this.enviaDatosAbase();
       this.limpiaMensajes();
-      this.enviaDatosAbase()  ;
+      this.enviaDatosAbase();
     })).subscribe();
 
-
-  }
-  //Función para hacer un spinner de carga
-  public muestraSpinner(val: boolean) {
 
   }
 }

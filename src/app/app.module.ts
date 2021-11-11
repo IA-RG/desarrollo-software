@@ -19,6 +19,7 @@ import { AdministradorDeTesisComponent } from './administrador-de-tesis/administ
 import { RegistradorDeTesisComponent } from './registrador-de-tesis/registrador-de-tesis.component';
 import { DataService } from './shared/services/DataService.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 
 
