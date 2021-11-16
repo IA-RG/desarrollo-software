@@ -39,6 +39,7 @@ build/Release
 
 *.py
 *.txt
+/functions/envvar.js
 
 # Dependency directories
 node_modules/
