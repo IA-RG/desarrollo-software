@@ -25,7 +25,10 @@ export class DataService {
 
   buscarTesis(formData: any) {
     const data=JSON.stringify(formData);
-    return this.http.get(`http://localhost:3000/busqueda/${data}`);
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json;charset=utf-8'
+    });
+    return this.http.get(`http://localhost:3000/busqueda/${data}`,{observe:'response',headers});
   }
 
   // buscarTesis(formData: any): Tesis[] {

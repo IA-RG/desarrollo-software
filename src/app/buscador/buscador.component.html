@@ -4,6 +4,22 @@
     (emisorDeDatos)="capturarDatos($event)"
     [accionDeBoton]="'Buscar'"
   ></app-formulario>
+  <div *ngIf="busquedaIniciada">
+    <div class="alert alert-primary d-flex align-items-center" role="alert">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+      <div>
+        Búsqueda iniciada
+      </div>
+    </div>
+  </div>
+  <div *ngIf="huboError">
+    <div class="alert alert-danger d-flex align-items-center" role="alert">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+      <div>
+        {{error}}
+      </div>
+    </div>
+  </div>
   <div *ngFor="let tesis of resultado">
     <a [href]="tesis.enlaceATesis">{{ tesis.titulo }}, {{ tesis.year }}</a>
     <button
@@ -30,6 +46,10 @@
       <div>
         sinodales:
         <span *ngFor="let sinodal of tesis.sinodales">{{ sinodal }},</span>
+      </div>
+      <div>
+        palabras:
+        <span *ngFor="let palabra of tesis.palabrasClave">{{ palabra }},</span>
       </div>
       <div>carrera:{{ tesis.carrera }}</div>
       <div>grado:{{ tesis.grado }}</div>

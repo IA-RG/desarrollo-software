@@ -3,6 +3,7 @@
   <form
     (ngSubmit)="emitirDatos()"
     [formGroup]="formulario.controladorDeFormulario"
+    accept-charset="UTF-8"
   >
     <div *ngFor="let pregunta of formulario.formulario" class="form-row">
       <app-pregunta
