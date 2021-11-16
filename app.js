@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 const express = require("express");
 const cors = require("cors");
-const env= require("./functions/envvar");
+const env = require("./functions/envvar");
 const tesisFunctions = require("./functions/tesis");
 const consultas = require("./functions/consultas2");
 
@@ -10,6 +10,7 @@ const connection = mysql.createConnection({
   user: "root",
   password: env.password(),
   database: "proyectotesis",
+  charset : 'utf8mb4_spanish_ci'
 });
 
 const pool = mysql.createPool({
@@ -20,70 +21,17 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  charset : 'utf8mb4_spanish_ci',
 });
 
 const promisePool = pool.promise();
 
 const app = express();
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(cors());
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
-  res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
-  next();
-});
-
-app.get("/profesor", (req, res) => {
-  console.log(req.body.profe);
-  const profe = req.body.profe;
-  // connection.query(
-  //   `select * from profesor as p where p.nombre like '${profe}%'`,
-  //   (err, result, fields) => {
-  //     if (err) {
-  //       console.log(err);
-  //       res.status(404).send("Error");
-  //     } else {
-  //       console.log(result);
-  //       res.status(200).send(JSON.stringify(result));
-  //     }
-  //   }
-  // );
-  connection.query(`select * from profesor`, (err, result, fields) => {
-    if (err) {
-      console.log(err);
-      res.status(404).send("Error");
-    } else {
-      console.log(result);
-      res.status(200).send(JSON.stringify(result));
-    }
-  });
-});
-
-app.get("/profesor/:profe", (req, res) => {
-  console.log(req.params.profe);
-  const profe = req.params.profe;
-  connection.query(
-    `select * from profesor as p where p.nombre like '%${pofe}%'`,
-    (err, result, fields) => {
-      if (err) {
-        console.log(err);
-        res.status(404).send("Error");
-      } else {
-        console.log(result);
-        res.status(200).send(JSON.stringify(result));
-      }
-    }
-  );
-});
 
 app.get("/busqueda/:busqueda", async (req, res) => {
   const formData = JSON.parse(req.params.busqueda);
@@ -100,16 +48,24 @@ app.get("/busqueda/:busqueda", async (req, res) => {
     formData.year,
     formData.consulta
   );
-  // console.log(consulta);
-  tesisFunctions.obtenerTesis(consulta,promisePool,res).then((tesisResultantes)=>{
-    console.log(tesisResultantes);
-    res.status(200).send(JSON.stringify({tesis:tesisResultantes}));
-  });
-  // console.log(tesisResultantes);
   
+  
+  // console.log(consulta);
+  tesisFunctions
+    .obtenerTesis(consulta, promisePool, res)
+    .then((tesisResultantes) => {
+      console.log(tesisResultantes);
+      tesisResultantes.length>0?res.status(200).send(JSON.stringify({ tesis: tesisResultantes })):res.status(404).send();
+    })
+    .catch((err) => {
+      console.log(err);
+      res
+        .status(503).send();
+    });
+  // console.log(tesisResultantes);
 });
 
-app.post("/tesis", (req, res)=>{
+app.post("/tesis", (req, res) => {
   console.log("DENTRO");
   console.log(req.body);
   res.status(200).send(JSON.stringify("OK"));

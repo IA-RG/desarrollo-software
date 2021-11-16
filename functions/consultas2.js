@@ -10,6 +10,9 @@ function obtenerConsulta(
   year,
   consulta
 ) {
+  // const cons=consulta.split("'");
+  // consulta=cons[1];
+  console.log(consulta);
   if (
     autor &&
     !carrera &&
@@ -21,7 +24,9 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%';`;
+    // select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%Váldes%' or a.apellidoMaterno like '%Váldes%' or a.apellidoMaterno like '%Váldes%';
+    // select * from autor where apellidoPaterno like '%ValdÃ©s%'; select * from autor where apellidoPaterno like '%Valdés%';
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%';`;
   } else if (
     !autor &&
     carrera &&
@@ -45,7 +50,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     !autor &&
     !carrera &&
@@ -93,7 +98,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     !autor &&
     !carrera &&
@@ -129,7 +134,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -141,7 +146,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -153,7 +158,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -165,7 +170,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -177,7 +182,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     sinodales &&
@@ -189,7 +194,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     titulo &&
@@ -201,7 +206,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     year &&
@@ -213,7 +218,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -225,7 +230,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -273,7 +278,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     titulo &&
@@ -309,7 +314,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -321,7 +326,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -333,7 +338,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     directores &&
     sinodales &&
@@ -345,7 +350,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     titulo &&
@@ -357,7 +362,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     year &&
@@ -369,7 +374,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -405,7 +410,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     grado &&
     titulo &&
@@ -453,7 +458,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     titulo &&
@@ -489,7 +494,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     resumen &&
     titulo &&
@@ -525,7 +530,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     sinodales &&
     year &&
@@ -537,7 +542,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     titulo &&
     year &&
@@ -561,7 +566,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -573,7 +578,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -585,7 +590,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -597,7 +602,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -609,7 +614,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -621,7 +626,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -633,7 +638,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -645,7 +650,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -657,7 +662,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -669,7 +674,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -681,7 +686,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -693,7 +698,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -705,7 +710,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -717,7 +722,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -729,7 +734,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -741,7 +746,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -753,7 +758,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -765,7 +770,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -777,7 +782,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -789,7 +794,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -801,7 +806,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -813,7 +818,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -825,7 +830,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -837,7 +842,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -849,7 +854,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     sinodales &&
@@ -861,7 +866,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     sinodales &&
@@ -873,7 +878,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     titulo &&
@@ -885,7 +890,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -897,7 +902,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -909,7 +914,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -921,7 +926,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -933,7 +938,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -945,7 +950,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -957,7 +962,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -993,7 +998,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -1041,7 +1046,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -1077,7 +1082,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     resumen &&
@@ -1113,7 +1118,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     sinodales &&
@@ -1125,7 +1130,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     titulo &&
@@ -1149,7 +1154,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -1161,7 +1166,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -1173,7 +1178,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -1185,7 +1190,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -1197,7 +1202,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -1209,7 +1214,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -1221,7 +1226,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -1233,7 +1238,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -1245,7 +1250,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -1257,7 +1262,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -1269,7 +1274,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -1281,7 +1286,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     sinodales &&
@@ -1293,7 +1298,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     sinodales &&
@@ -1305,7 +1310,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     titulo &&
@@ -1317,7 +1322,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -1341,7 +1346,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -1377,7 +1382,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     grado &&
     resumen &&
@@ -1413,7 +1418,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     grado &&
     sinodales &&
@@ -1425,7 +1430,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     titulo &&
@@ -1449,7 +1454,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     resumen &&
@@ -1485,7 +1490,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     sinodales &&
@@ -1497,7 +1502,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     titulo &&
@@ -1521,7 +1526,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     resumen &&
     sinodales &&
@@ -1533,7 +1538,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     resumen &&
     titulo &&
@@ -1557,7 +1562,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1569,7 +1574,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1581,7 +1586,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1593,7 +1598,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1605,7 +1610,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1617,7 +1622,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1629,7 +1634,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1641,7 +1646,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1653,7 +1658,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1665,7 +1670,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1677,7 +1682,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1689,7 +1694,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1701,7 +1706,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1713,7 +1718,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1725,7 +1730,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1737,7 +1742,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1749,7 +1754,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1761,7 +1766,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1773,7 +1778,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1785,7 +1790,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1797,7 +1802,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -1809,7 +1814,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1821,7 +1826,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1833,7 +1838,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1845,7 +1850,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1857,7 +1862,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1869,7 +1874,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1881,7 +1886,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1893,7 +1898,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1905,7 +1910,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1917,7 +1922,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1929,7 +1934,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1941,7 +1946,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1953,7 +1958,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1965,7 +1970,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1977,7 +1982,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -1989,7 +1994,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2001,7 +2006,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2013,7 +2018,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2025,7 +2030,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2037,7 +2042,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2049,7 +2054,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2061,7 +2066,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2073,7 +2078,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2085,7 +2090,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2097,7 +2102,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -2109,7 +2114,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -2121,7 +2126,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -2133,7 +2138,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -2145,7 +2150,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -2157,7 +2162,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -2169,7 +2174,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -2181,7 +2186,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -2193,7 +2198,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -2205,7 +2210,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -2217,7 +2222,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     sinodales &&
@@ -2229,7 +2234,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2241,7 +2246,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2253,7 +2258,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2265,7 +2270,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2277,7 +2282,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2289,7 +2294,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2301,7 +2306,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2313,7 +2318,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2325,7 +2330,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2337,7 +2342,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2349,7 +2354,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2361,7 +2366,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2373,7 +2378,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2385,7 +2390,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2397,7 +2402,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -2409,7 +2414,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -2433,7 +2438,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -2469,7 +2474,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -2505,7 +2510,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -2517,7 +2522,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -2541,7 +2546,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -2577,7 +2582,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -2589,7 +2594,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -2613,7 +2618,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     resumen &&
@@ -2625,7 +2630,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     resumen &&
@@ -2649,7 +2654,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2661,7 +2666,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2673,7 +2678,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2685,7 +2690,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2697,7 +2702,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2709,7 +2714,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2721,7 +2726,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2733,7 +2738,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2745,7 +2750,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2757,7 +2762,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -2769,7 +2774,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -2781,7 +2786,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -2793,7 +2798,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -2805,7 +2810,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -2817,7 +2822,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -2829,7 +2834,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -2841,7 +2846,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -2853,7 +2858,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -2865,7 +2870,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -2877,7 +2882,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     sinodales &&
@@ -2889,7 +2894,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -2901,7 +2906,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -2937,7 +2942,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -2949,7 +2954,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -2973,7 +2978,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     grado &&
     resumen &&
@@ -2985,7 +2990,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     resumen &&
@@ -3009,7 +3014,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     resumen &&
@@ -3021,7 +3026,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     resumen &&
@@ -3033,7 +3038,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     resumen &&
@@ -3057,7 +3062,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     resumen &&
     sinodales &&
@@ -3069,7 +3074,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3081,7 +3086,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3093,7 +3098,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3105,7 +3110,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3117,7 +3122,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3129,7 +3134,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3141,7 +3146,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3153,7 +3158,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3165,7 +3170,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3177,7 +3182,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3189,7 +3194,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3201,7 +3206,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3213,7 +3218,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3225,7 +3230,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3237,7 +3242,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3249,7 +3254,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3261,7 +3266,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3273,7 +3278,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3285,7 +3290,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3297,7 +3302,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3309,7 +3314,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3321,7 +3326,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3333,7 +3338,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3345,7 +3350,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3357,7 +3362,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3369,7 +3374,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3381,7 +3386,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3393,7 +3398,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3405,7 +3410,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3417,7 +3422,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3429,7 +3434,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3441,7 +3446,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3453,7 +3458,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3465,7 +3470,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3477,7 +3482,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -3489,7 +3494,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3501,7 +3506,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3513,7 +3518,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3525,7 +3530,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3537,7 +3542,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3549,7 +3554,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3561,7 +3566,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3573,7 +3578,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3585,7 +3590,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3597,7 +3602,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3609,7 +3614,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3621,7 +3626,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3633,7 +3638,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3645,7 +3650,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3657,7 +3662,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3669,7 +3674,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3681,7 +3686,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3693,7 +3698,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3705,7 +3710,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3717,7 +3722,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -3729,7 +3734,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3741,7 +3746,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3753,7 +3758,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3765,7 +3770,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3777,7 +3782,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3789,7 +3794,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3801,7 +3806,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3813,7 +3818,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3825,7 +3830,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3837,7 +3842,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -3849,7 +3854,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -3861,7 +3866,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -3873,7 +3878,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -3885,7 +3890,7 @@ function obtenerConsulta(
     !grado &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -3897,7 +3902,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     resumen &&
@@ -3909,7 +3914,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -3921,7 +3926,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -3933,7 +3938,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -3945,7 +3950,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -3957,7 +3962,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -3969,7 +3974,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -3981,7 +3986,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -3993,7 +3998,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4005,7 +4010,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4017,7 +4022,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4029,7 +4034,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4041,7 +4046,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4053,7 +4058,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4065,7 +4070,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4077,7 +4082,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4089,7 +4094,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4101,7 +4106,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4113,7 +4118,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4125,7 +4130,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4137,7 +4142,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -4149,7 +4154,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -4161,7 +4166,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -4197,7 +4202,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -4209,7 +4214,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -4233,7 +4238,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -4245,7 +4250,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -4269,7 +4274,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -4281,7 +4286,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -4293,7 +4298,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -4317,7 +4322,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     resumen &&
@@ -4329,7 +4334,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4341,7 +4346,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4353,7 +4358,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4365,7 +4370,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4377,7 +4382,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4389,7 +4394,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4401,7 +4406,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4413,7 +4418,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4425,7 +4430,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4437,7 +4442,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -4449,7 +4454,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -4461,7 +4466,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -4473,7 +4478,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -4485,7 +4490,7 @@ function obtenerConsulta(
     !grado &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -4497,7 +4502,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     resumen &&
@@ -4509,7 +4514,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -4521,7 +4526,7 @@ function obtenerConsulta(
     !directores &&
     !year
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -4533,7 +4538,7 @@ function obtenerConsulta(
     !directores &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -4557,7 +4562,7 @@ function obtenerConsulta(
     !directores &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     resumen &&
@@ -4569,7 +4574,7 @@ function obtenerConsulta(
     !directores &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     palabrasClave &&
     resumen &&
@@ -4581,7 +4586,7 @@ function obtenerConsulta(
     !directores &&
     !grado
   ) {
-    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4593,7 +4598,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4605,7 +4610,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4617,7 +4622,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4629,7 +4634,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4641,7 +4646,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4653,7 +4658,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4665,7 +4670,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4677,7 +4682,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4689,7 +4694,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4701,7 +4706,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4713,7 +4718,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4725,7 +4730,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4737,7 +4742,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4749,7 +4754,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4761,7 +4766,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4773,7 +4778,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4785,7 +4790,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4797,7 +4802,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4809,7 +4814,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4821,7 +4826,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4833,7 +4838,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4845,7 +4850,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4857,7 +4862,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4869,7 +4874,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4881,7 +4886,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4893,7 +4898,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4905,7 +4910,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4917,7 +4922,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4929,7 +4934,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4941,7 +4946,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4953,7 +4958,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4965,7 +4970,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4977,7 +4982,7 @@ function obtenerConsulta(
     !grado &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -4989,7 +4994,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5001,7 +5006,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5013,7 +5018,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5025,7 +5030,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5037,7 +5042,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5049,7 +5054,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5061,7 +5066,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5073,7 +5078,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5085,7 +5090,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5097,7 +5102,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5109,7 +5114,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5121,7 +5126,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5133,7 +5138,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5145,7 +5150,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5157,7 +5162,7 @@ function obtenerConsulta(
     !grado &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5169,7 +5174,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5181,7 +5186,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -5193,7 +5198,7 @@ function obtenerConsulta(
     !directores &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -5205,7 +5210,7 @@ function obtenerConsulta(
     !directores &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -5217,7 +5222,7 @@ function obtenerConsulta(
     !directores &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -5229,7 +5234,7 @@ function obtenerConsulta(
     !directores &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -5241,7 +5246,7 @@ function obtenerConsulta(
     !directores &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     palabrasClave &&
@@ -5253,7 +5258,7 @@ function obtenerConsulta(
     !directores &&
     !grado
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5265,7 +5270,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5277,7 +5282,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5289,7 +5294,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5301,7 +5306,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5313,7 +5318,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5325,7 +5330,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5337,7 +5342,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5349,7 +5354,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5361,7 +5366,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5373,7 +5378,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5385,7 +5390,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5397,7 +5402,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5409,7 +5414,7 @@ function obtenerConsulta(
     !grado &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5421,7 +5426,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5433,7 +5438,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -5445,7 +5450,7 @@ function obtenerConsulta(
     !directores &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -5457,7 +5462,7 @@ function obtenerConsulta(
     !directores &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -5481,7 +5486,7 @@ function obtenerConsulta(
     !directores &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -5493,7 +5498,7 @@ function obtenerConsulta(
     !directores &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     palabrasClave &&
@@ -5505,7 +5510,7 @@ function obtenerConsulta(
     !directores &&
     !grado
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -5517,7 +5522,7 @@ function obtenerConsulta(
     !carrera &&
     !year
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -5529,7 +5534,7 @@ function obtenerConsulta(
     !carrera &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -5541,7 +5546,7 @@ function obtenerConsulta(
     !carrera &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -5553,7 +5558,7 @@ function obtenerConsulta(
     !carrera &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -5565,7 +5570,7 @@ function obtenerConsulta(
     !carrera &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     palabrasClave &&
@@ -5577,7 +5582,7 @@ function obtenerConsulta(
     !carrera &&
     !grado
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     grado &&
     palabrasClave &&
@@ -5589,7 +5594,7 @@ function obtenerConsulta(
     !carrera &&
     !directores
   ) {
-    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5601,7 +5606,7 @@ function obtenerConsulta(
     !titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5613,7 +5618,7 @@ function obtenerConsulta(
     !sinodales &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5625,7 +5630,7 @@ function obtenerConsulta(
     !sinodales &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5637,7 +5642,7 @@ function obtenerConsulta(
     !resumen &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5649,7 +5654,7 @@ function obtenerConsulta(
     !resumen &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5661,7 +5666,7 @@ function obtenerConsulta(
     !resumen &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5673,7 +5678,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5685,7 +5690,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5697,7 +5702,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5709,7 +5714,7 @@ function obtenerConsulta(
     !palabrasClave &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5721,7 +5726,7 @@ function obtenerConsulta(
     !grado &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5733,7 +5738,7 @@ function obtenerConsulta(
     !grado &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5745,7 +5750,7 @@ function obtenerConsulta(
     !grado &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5757,7 +5762,7 @@ function obtenerConsulta(
     !grado &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5769,7 +5774,7 @@ function obtenerConsulta(
     !grado &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5781,7 +5786,7 @@ function obtenerConsulta(
     !directores &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5793,7 +5798,7 @@ function obtenerConsulta(
     !directores &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5805,7 +5810,7 @@ function obtenerConsulta(
     !directores &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5817,7 +5822,7 @@ function obtenerConsulta(
     !directores &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5829,7 +5834,7 @@ function obtenerConsulta(
     !directores &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -5841,7 +5846,7 @@ function obtenerConsulta(
     !directores &&
     !grado
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5853,7 +5858,7 @@ function obtenerConsulta(
     !carrera &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5865,7 +5870,7 @@ function obtenerConsulta(
     !carrera &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5877,7 +5882,7 @@ function obtenerConsulta(
     !carrera &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5889,7 +5894,7 @@ function obtenerConsulta(
     !carrera &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5901,7 +5906,7 @@ function obtenerConsulta(
     !carrera &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -5913,7 +5918,7 @@ function obtenerConsulta(
     !carrera &&
     !grado
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     grado &&
@@ -5925,7 +5930,7 @@ function obtenerConsulta(
     !carrera &&
     !directores
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5937,7 +5942,7 @@ function obtenerConsulta(
     !autor &&
     !year
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5949,7 +5954,7 @@ function obtenerConsulta(
     !autor &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5961,7 +5966,7 @@ function obtenerConsulta(
     !autor &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5973,7 +5978,7 @@ function obtenerConsulta(
     !autor &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5985,7 +5990,7 @@ function obtenerConsulta(
     !autor &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -5997,7 +6002,7 @@ function obtenerConsulta(
     !autor &&
     !grado
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     grado &&
@@ -6009,7 +6014,7 @@ function obtenerConsulta(
     !autor &&
     !directores
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     directores &&
     grado &&
@@ -6021,7 +6026,7 @@ function obtenerConsulta(
     !autor &&
     !carrera
   ) {
-    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6033,7 +6038,7 @@ function obtenerConsulta(
     titulo &&
     !year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6045,7 +6050,7 @@ function obtenerConsulta(
     year &&
     !titulo
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6057,7 +6062,7 @@ function obtenerConsulta(
     year &&
     !sinodales
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6069,7 +6074,7 @@ function obtenerConsulta(
     year &&
     !resumen
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6081,7 +6086,7 @@ function obtenerConsulta(
     year &&
     !palabrasClave
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6093,7 +6098,7 @@ function obtenerConsulta(
     year &&
     !grado
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6105,7 +6110,7 @@ function obtenerConsulta(
     year &&
     !directores
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     directores &&
@@ -6117,7 +6122,7 @@ function obtenerConsulta(
     year &&
     !carrera
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     carrera &&
     directores &&
@@ -6129,7 +6134,7 @@ function obtenerConsulta(
     year &&
     !autor
   ) {
-    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return `select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   } else if (
     autor &&
     carrera &&
@@ -6141,7 +6146,7 @@ function obtenerConsulta(
     titulo &&
     year
   ) {
-    return `select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
+    return ` select distinct t.id from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id where a.nombre like '%${consulta}%' or a.apellidoPaterno like '%${consulta}%' or a.apellidoMaterno like '%${consulta}%' union select distinct id from (select t.titulo,t.id,concat(a2.nombre,' ',a2.apellidoPaterno,' ',a2.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis join autor a2 on a2.fk_tesis=t.id)  as autores where nombre like '%${consulta}%' union select distinct t.id from tesis t where carrera like '%${consulta}%' union select distinct t.id from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where grado like '%${consulta}%' union select distinct t.id from tesis t join palabras_tesis p on t.id=p.fk_tesis where p.fk_palabra like '%${consulta}%' union select distinct t.id from tesis t where resumen like '%${consulta}%' union select distinct t.id from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where p.nombre like '%${consulta}%' or p.apellidoPaterno like '%${consulta}%' or p.apellidoMaterno like '%${consulta}%' union select distinct t.id from tesis t where titulo like '%${consulta}%' union select distinct t.id from tesis t where year1 like '%${consulta}%';`;
   }
 }
 
