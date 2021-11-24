@@ -36,7 +36,7 @@ export class RegistradorDeTesisComponent implements OnInit {
   val: number = 0;
   enlace: string[] = [];
   constructor(private dataService: DataService, private store: FirebaseApp, private _store: AngularFireStorage) {
-    const formulario: Pregunta<string | number | boolean>[] = [
+   const formulario: Pregunta<string | number | boolean>[] = [
       new Pregunta<string>({
         key: 'nummT',
         label: 'Número de tesis',
@@ -54,28 +54,196 @@ export class RegistradorDeTesisComponent implements OnInit {
         order: 1,
       }),
       new Pregunta<string>({
-        key: 'integrantes',
-        label: 'Nombre de integrantes, separelos por comas (,)',
+        key: 'integrante1Nombre',
+        label: 'Nombre del primer integrante',
         type: 'text',
         required: true,
         controlType: 'text',
         order: 2,
       }),
       new Pregunta<string>({
-        key: 'directores',
-        label: 'Nombre de los directores de la tesis, separelos por comas (,)',
+        key: 'integrante1APp',
+        label: 'Apellido paterno del primer integrante',
         type: 'text',
         required: true,
         controlType: 'text',
         order: 3,
       }),
       new Pregunta<string>({
-        key: 'sinodales',
-        label: 'Nombre de los sinodales asignados a la tesis, separelos por comas (,)',
+        key: 'integrante1APm',
+        label: 'Apellido materno del primer integrante',
         type: 'text',
         required: true,
         controlType: 'text',
         order: 4,
+      }),
+      new Pregunta<string>({
+        key: 'integrante2Nombre',
+        label: 'Nombre del segundo integrante',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 5,
+      }),
+      new Pregunta<string>({
+        key: 'integrante2APp',
+        label: 'Apellido paterno del segundo integrante',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 6,
+      }),
+      new Pregunta<string>({
+        key: 'integrante2APm',
+        label: 'Apellido materno del segundo integrante',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 7,
+      }),
+      new Pregunta<string>({
+        key: 'integrante3Nombre',
+        label: 'Nombre del tercer integrante',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 8,
+      }),
+      new Pregunta<string>({
+        key: 'integrante3APp',
+        label: 'Apellido paterno del tercer integrante',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 9,
+      }),
+      new Pregunta<string>({
+        key: 'integranteAPm',
+        label: 'Apellido materno del tercer integrante',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 10,
+      }),
+      new Pregunta<string>({
+        key: 'director1Nombre',
+        label: 'Nombre del primer director',
+        type: 'text',
+        required: true,
+        controlType: 'text',
+        order: 11,
+      }),
+      new Pregunta<string>({
+        key: 'director1App',
+        label: 'Apellido paterno del primer director',
+        type: 'text',
+        required: true,
+        controlType: 'text',
+        order: 12,
+      }),
+      new Pregunta<string>({
+        key: 'director1APm',
+        label: 'Apellido materno del primer director',
+        type: 'text',
+        required: true,
+        controlType: 'text',
+        order: 13,
+      }),
+      new Pregunta<string>({
+        key: 'director2Nombre',
+        label: 'Nombre del segundo director',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 14,
+      }),
+      new Pregunta<string>({
+        key: 'director2APp',
+        label: 'Apellido paterno del segundo director',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 15,
+      }),
+      new Pregunta<string>({
+        key: 'director2APm',
+        label: 'Apellido materno del segundo director',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 16,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal1Nombre',
+        label: 'Nombre del primer sinodal',
+        type: 'text',
+        required: true,
+        controlType: 'text',
+        order: 17,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal1APp',
+        label: 'Apellido paterno del primer sinodal',
+        type: 'text',
+        required: true,
+        controlType: 'text',
+        order: 18,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal1APm',
+        label: 'Apellido materno del primer sinodal',
+        type: 'text',
+        required: true,
+        controlType: 'text',
+        order: 19,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal2Nombre',
+        label: 'Nombre del segundo sinodal',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 20,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal2APp',
+        label: 'Apellido paterno del segundo sinodal',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 21,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal2APm',
+        label: 'Apellido materno del segundo sinodal',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 22,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal3Nombre',
+        label: 'Nombre del tercer sinodal',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 23,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal3APp',
+        label: 'Apellido paterno del tercer sinodal',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 24,
+      }),
+      new Pregunta<string>({
+        key: 'sinodal3APm',
+        label: 'Apellido materno del tercer sinodal',
+        type: 'text',
+        required: false,
+        controlType: 'text',
+        order: 25,
       }),
       new Pregunta<string>({
         key: 'archivoFinal',
@@ -83,7 +251,7 @@ export class RegistradorDeTesisComponent implements OnInit {
         type: 'file',
         required: true,
         controlType: 'file',
-        order: 5,
+        order: 26,
       }),
       //versiones anteriores, queda en espera
       new Pregunta<string>({
@@ -93,7 +261,7 @@ export class RegistradorDeTesisComponent implements OnInit {
         required: true,
         controlType: 'text',
         //7 dado las versiones anteriores
-        order: 6,
+        order: 27,
       }),
       new Pregunta<number>({
         key: 'year',
@@ -113,7 +281,7 @@ export class RegistradorDeTesisComponent implements OnInit {
         type: 'text',
         required: true,
         controlType: 'text',
-        order: 8
+        order: 28
       }),
       new Pregunta<string>({
         key: 'grado',
@@ -121,7 +289,7 @@ export class RegistradorDeTesisComponent implements OnInit {
         type: 'text',
         required: true,
         controlType: 'text',
-        order: 9,
+        order: 29,
       }),
       new Pregunta<string>({
         key: 'resumen',
@@ -129,7 +297,7 @@ export class RegistradorDeTesisComponent implements OnInit {
         type: 'text',
         required: true,
         controlType: 'text',
-        order: 10,
+        order: 30,
       })
     ];
     this._formulario = new Formulario(formulario, 'Registro de tesis');
@@ -138,8 +306,10 @@ export class RegistradorDeTesisComponent implements OnInit {
 
   ngOnInit(): void { }
   capturarDatos(datos: { formData: Object; file: File | null }) {
-    //console.log(datos);
+    console.log(datos);
     var arr = [];
+    let nombre : string[] = [];
+    let cadena = "";
     let cadInteg: string;
     let direct: string;
     let sinodalesS: string;
@@ -151,26 +321,106 @@ export class RegistradorDeTesisComponent implements OnInit {
     //Ahora lo asignamos a las variables
     this._numeroT = arr[0];
     this._tituloT = arr[1];
-    cadInteg = arr[2];
-    this._integrantes = cadInteg.split(',');
-    direct = arr[3];
-    this._directores = direct.split(',');
-    sinodalesS = arr[4];
-    this._sinodales = sinodalesS.split(',');
-    this._nArchivo = arr[5];
-    pC = arr[6];
+    //informacion de los integrantes
+    nombre.push(arr[2]);
+    nombre.push(arr[3]);
+    nombre.push(arr[4]);
+    //tenemos el nombre completo del primer integrante
+    cadena = nombre.join(',');
+    this._integrantes.push(cadena);
+    nombre = [];
+    cadena = "";
+    this._integrantes.push(";");
+    nombre.push(arr[5]);
+    nombre.push(arr[6]);
+    nombre.push(arr[7]);
+    //tenemos el nombre completo del segundo integrante
+    cadena = nombre.join(',');
+    this._integrantes.push(cadena);
+    nombre = [];
+    cadena = "";
+    this._integrantes.push(";");
+    nombre.push(arr[8]);
+    nombre.push(arr[9]);
+    nombre.push(arr[10]);
+    //tenemos el nombre completo del tercer integrante
+    cadena = nombre.join(',');
+    this._integrantes.push(cadena);
+    nombre = [];
+    cadena = "";
+    this._integrantes.push(";");
+    /*************************Terminamos de obtener los datos de integrantes*************************/
+    //Obtenemos la información de director
+    nombre.push(arr[11]);
+    nombre.push(arr[12]);
+    nombre.push(arr[13]);
+    //tenemos el nombre completo del primer director
+    cadena = nombre.join(',');
+    this._directores.push(cadena);
+    nombre = [];
+    cadena = "";
+    this._directores.push(";");
+    nombre.push(arr[14]);
+    nombre.push(arr[15]);
+    nombre.push(arr[16]);
+    //tenemos el nombre completo del segundo director
+    cadena = nombre.join(',');
+    this._directores.push(cadena);
+    nombre = [];
+    cadena = "";
+    this._directores.push(";");
+    /*************************Terminamos de obtener los datos de directores*************************/
+     //Obtenemos la información de sinodal
+     nombre.push(arr[17]);
+     nombre.push(arr[18]);
+     nombre.push(arr[19]);
+     //tenemos el nombre completo del primer sinodal
+     cadena = nombre.join(',');
+     this._sinodales.push(cadena);
+     nombre = [];
+     cadena = "";
+     this._sinodales.push(";");
+     nombre.push(arr[20]);
+     nombre.push(arr[21]);
+     nombre.push(arr[22]);
+     //tenemos el nombre completo del segundo sinodal
+     cadena = nombre.join(',');
+     this._sinodales.push(cadena);
+     nombre = [];
+     cadena = "";
+     this._sinodales.push(";");
+     nombre.push(arr[23]);
+     nombre.push(arr[24]);
+     nombre.push(arr[25]);
+     //tenemos el nombre completo del tercer sinodal
+     cadena = nombre.join(',');
+     this._sinodales.push(cadena);
+     nombre = [];
+     cadena = "";
+     this._sinodales.push(";");
+    
+    this._nArchivo = arr[26];
+    pC = arr[27];
     this._pClave = pC.split(',');
-    this._year = arr[7];
-    this._carrera = arr[8];
-    this._grado = arr[9];
-    this._resumen = arr[10];
+    this._year = arr[28];
+    this._carrera = arr[29];
+    this._grado = arr[30];
+    this._resumen = arr[31];
     this.tamArchivo = datos.file?.size;
     this._tipoArchivo = datos.file?.type;
     this.file = datos.file;
+
+
+
+    /***LIMPIAMOS LAS VARIABLES USADAS****/
+    arr = [];
+    nombre = [];
+    cadena = "";
     //console.log(this.file);
     //this.mostrarInformacion();
     this.limpiaMensajes();
-    this.validaDatos();
+    this.enviaDatosAbase();
+    //this.validaDatos();
   }
   public get formulario(): Formulario {
     return this._formulario;
@@ -281,9 +531,9 @@ export class RegistradorDeTesisComponent implements OnInit {
     const infoFormulario = {
       'numeroDeTT': this._numeroT,
       'titulo': this._tituloT,
-      'autores1': this._integrantes.join(','),
-      'directores': this._directores.join(','),
-      'sinodales': this._sinodales.join(','),
+      'autores': this._integrantes,
+      'directores': this._directores,
+      'sinodales': this._sinodales,
       'enlace': this._nArchivo,
       'palabrasClave': this._pClave.join(','),
       'year': this._year,
@@ -323,7 +573,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       this._nArchivo = cadena;
       this.enviaDatosAbase();
       this.limpiaMensajes();
-      this.enviaDatosAbase();
+      //this.enviaDatosAbase();
     })).subscribe();
 
 
