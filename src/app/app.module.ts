@@ -20,6 +20,7 @@ import { RegistradorDeTesisComponent } from './registrador-de-tesis/registrador-
 import { DataService } from './shared/services/DataService.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { PresentadorDeHistorialDeProfesorComponent } from './presentador-de-historial-de-profesor/presentador-de-historial-de-profesor.component';
 
 
 
@@ -31,6 +32,7 @@ import { CommonModule } from '@angular/common';
     BuscadorComponent,
     AdministradorDeTesisComponent,
     RegistradorDeTesisComponent,
+    PresentadorDeHistorialDeProfesorComponent,
   ],
   imports: [
     BrowserModule,
