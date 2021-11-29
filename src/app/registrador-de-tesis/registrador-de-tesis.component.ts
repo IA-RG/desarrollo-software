@@ -55,7 +55,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       }),
       new Pregunta<string>({
         key: 'integrante1Nombre',
-        label: 'Nombre del primer integrante',
+        label: 'Tu nombre (Nombre del primer integrante)',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -63,7 +63,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       }),
       new Pregunta<string>({
         key: 'integrante1APp',
-        label: 'Apellido paterno del primer integrante',
+        label: 'Tu apellido paterno (Apellido paterno del primer integrante)',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -71,7 +71,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       }),
       new Pregunta<string>({
         key: 'integrante1APm',
-        label: 'Apellido materno del primer integrante',
+        label: 'Tu apellido materno (Apellido materno del primer integrante)',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -321,6 +321,7 @@ export class RegistradorDeTesisComponent implements OnInit {
     //Ahora lo asignamos a las variables
     this._numeroT = arr[0];
     this._tituloT = arr[1];
+    //console.log(this._tituloT);
     //informacion de los integrantes
     nombre.push(arr[2]);
     nombre.push(arr[3]);
@@ -330,7 +331,7 @@ export class RegistradorDeTesisComponent implements OnInit {
     this._integrantes.push(cadena);
     nombre = [];
     cadena = "";
-    this._integrantes.push(";");
+    //this._integrantes.push(";");
     nombre.push(arr[5]);
     nombre.push(arr[6]);
     nombre.push(arr[7]);
@@ -339,7 +340,7 @@ export class RegistradorDeTesisComponent implements OnInit {
     this._integrantes.push(cadena);
     nombre = [];
     cadena = "";
-    this._integrantes.push(";");
+    //this._integrantes.push(";");
     nombre.push(arr[8]);
     nombre.push(arr[9]);
     nombre.push(arr[10]);
@@ -348,27 +349,29 @@ export class RegistradorDeTesisComponent implements OnInit {
     this._integrantes.push(cadena);
     nombre = [];
     cadena = "";
-    this._integrantes.push(";");
+    //this._integrantes.push(";");
     /*************************Terminamos de obtener los datos de integrantes*************************/
     //Obtenemos la información de director
     nombre.push(arr[11]);
     nombre.push(arr[12]);
     nombre.push(arr[13]);
+    //console.log(nombre);
     //tenemos el nombre completo del primer director
     cadena = nombre.join(',');
     this._directores.push(cadena);
     nombre = [];
     cadena = "";
-    this._directores.push(";");
+    //this._directores.push(";");
     nombre.push(arr[14]);
     nombre.push(arr[15]);
     nombre.push(arr[16]);
+    //console.log(nombre);
     //tenemos el nombre completo del segundo director
     cadena = nombre.join(',');
     this._directores.push(cadena);
     nombre = [];
     cadena = "";
-    this._directores.push(";");
+    //this._directores.push(";");
     /*************************Terminamos de obtener los datos de directores*************************/
      //Obtenemos la información de sinodal
      nombre.push(arr[17]);
@@ -379,7 +382,7 @@ export class RegistradorDeTesisComponent implements OnInit {
      this._sinodales.push(cadena);
      nombre = [];
      cadena = "";
-     this._sinodales.push(";");
+     //this._sinodales.push(";");
      nombre.push(arr[20]);
      nombre.push(arr[21]);
      nombre.push(arr[22]);
@@ -388,7 +391,7 @@ export class RegistradorDeTesisComponent implements OnInit {
      this._sinodales.push(cadena);
      nombre = [];
      cadena = "";
-     this._sinodales.push(";");
+     //this._sinodales.push(";");
      nombre.push(arr[23]);
      nombre.push(arr[24]);
      nombre.push(arr[25]);
@@ -397,7 +400,7 @@ export class RegistradorDeTesisComponent implements OnInit {
      this._sinodales.push(cadena);
      nombre = [];
      cadena = "";
-     this._sinodales.push(";");
+     //this._sinodales.push(";");
     
     this._nArchivo = arr[26];
     pC = arr[27];
@@ -418,8 +421,9 @@ export class RegistradorDeTesisComponent implements OnInit {
     cadena = "";
     //console.log(this.file);
     //this.mostrarInformacion();
-    this.limpiaMensajes();
-    this.enviaDatosAbase();
+    this.limpiaMensajes(0);
+    this.pruebaFIRE();
+    //this.enviaDatosAbase();
     //this.validaDatos();
   }
   public get formulario(): Formulario {
@@ -523,9 +527,29 @@ export class RegistradorDeTesisComponent implements OnInit {
 
     }
   }
-  public limpiaMensajes(): void {
-    this.mensajes = [];
-    this.enlace = [];
+  public limpiaMensajes(num : number): void {
+    if(num == 0){
+      this.mensajes = [];
+      this.enlace = [];
+    }else if(num == 1){
+      this._numeroT = "";
+      this._tituloT = "";
+      this._integrantes = [];
+      this._directores = [];
+      this._sinodales = [];
+      this._nArchivo = '';
+      this._pClave = [];
+      this._year = 0;
+      this._carrera = "";
+      this._grado = "";
+      this._resumen = "";
+      this.tamArchivo = 0;
+      this._tipoArchivo = "";
+      this.file = "";
+
+
+    }
+
   }
   public enviaDatosAbase(): void {
     const infoFormulario = {
@@ -572,7 +596,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       let cadena = this.enlace[i];
       this._nArchivo = cadena;
       this.enviaDatosAbase();
-      this.limpiaMensajes();
+      this.limpiaMensajes(1);
       //this.enviaDatosAbase();
     })).subscribe();
 

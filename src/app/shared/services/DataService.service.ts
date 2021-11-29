@@ -108,7 +108,7 @@ export class DataService {
     );
   }
   guardarTesis(info : any){
-    console.log(info);
+    //console.log(info);
     //peticion post
     //const term = info.trim();
     let headers = new HttpHeaders({
@@ -116,7 +116,7 @@ export class DataService {
     });
     //const options = term ? { params: new HttpParams().set('info', term) } : {};
     //return this.http.post(`http://localhost:3000/tesis/${info}`, options );
-    this.http.post(`http://localhost:3000/tesis/`,info, {headers: headers} ).subscribe(data=>{
+    return this.http.post(`http://localhost:3000/tesis/`,info, {headers: headers} ).subscribe(data=>{
       console.log(data);
     });
   }
