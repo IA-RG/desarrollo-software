@@ -10,8 +10,8 @@ function obtenerConsulta(
   year,
   consulta
 ) {
-  // const cons=consulta.split("'");
-  // consulta=cons[1];
+  const cons=consulta.split("'");
+  consulta=cons[1];
   console.log(consulta);
   if (
     autor &&
