@@ -14,6 +14,7 @@ async function obtenerArregloDeTesis(promisePool, ids) {
   var obtenerTesis;
   await Promise.all(
     ids.map(async (id) => {
+      console.log(id);
       obtenerAutores = `select a.fk_tesis as id,concat(a.nombre,' ',a.apellidoPaterno,' ',a.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis where a.fk_tesis=${id.id};`;
       obtenerSinodales = `select d.fk_tesis as id, concat(p.nombre,' ',p.apellidoPaterno,' ',p.apellidoMaterno) as nombre from tesis t join sinodal_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_sinodal where d.fk_tesis=${id.id};`;
       obtenerDirectores = `select d.fk_tesis as id, concat(p.nombre,' ',p.apellidoPaterno,' ',p.apellidoMaterno) as nombre from tesis t join director_tesis d on t.id=d.fk_tesis join profesor p on p.id=d.fk_director where d.fk_tesis=${id.id};`;
@@ -73,6 +74,7 @@ async function obtenerArregloDeTesis(promisePool, ids) {
 }
 
 module.exports.obtenerTesis = obtenerTesis;
+module.exports.obtenerArregloDeTesis=obtenerArregloDeTesis;
 
 // ids.forEach( async (id) => {
 //   obtenerAutores = `select a.fk_tesis as id,concat(a.nombre,' ',a.apellidoPaterno,' ',a.apellidoMaterno) as nombre from tesis t join autor a on t.id=a.fk_tesis where a.fk_tesis=${id.id};`;
