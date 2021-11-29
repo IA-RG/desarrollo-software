@@ -16,7 +16,7 @@
     </option>
   </select>
 <div *ngFor="let tesis of tesisRecibidas">
-  <a [href]="tesis.enlaceATesis">{{ tesis.titulo }}, {{ tesis.year }}</a>
+  <a [href]="tesis.enlaceATesis" target="_blank">{{ tesis.titulo }}, {{ tesis.year }}</a>
   <button
     *ngIf="!tesis.mostrarContenido"
     (click)="mostrarContenido(tesis, true)"

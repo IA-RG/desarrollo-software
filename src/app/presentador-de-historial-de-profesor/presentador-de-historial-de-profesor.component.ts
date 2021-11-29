@@ -56,6 +56,8 @@ export class PresentadorDeHistorialDeProfesorComponent implements OnInit {
         const i=0;
         res.director.forEach((tesis: any) => {
           this._director.push(dataService.toTesis(tesis));
+          console.log(tesis.enlaceAPdf);
+          
         });
         res.sinodal.forEach((tesis: any) => {
           this._sinodal.push(dataService.toTesis(tesis));
@@ -72,6 +74,27 @@ export class PresentadorDeHistorialDeProfesorComponent implements OnInit {
     console.log(filtro);
     
     this._director.forEach((tesis)=>{
+      if(filtro=="autores" || filtro=="directores" || filtro=="sinodales" || filtro=="palabrasClave")
+      {
+        tesis[filtro].forEach((cadena)=>{
+          if(lowerCase(cadena).includes(consulta))
+            this._resultado.push(tesis);
+        });
+      }
+      else if(filtro!='year')
+      {
+        if(lowerCase(tesis[filtro]).includes(consulta))
+          this._resultado.push(tesis);
+      }
+      else
+      {
+        if(tesis[filtro].toString().includes(consulta))
+          this._resultado.push(tesis);
+      }
+
+    });
+
+    this._sinodal.forEach((tesis)=>{
       if(filtro=="autores" || filtro=="directores" || filtro=="sinodales" || filtro=="palabrasClave")
       {
         tesis[filtro].forEach((cadena)=>{

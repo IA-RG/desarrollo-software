@@ -98,7 +98,7 @@ export class DataService {
       doc.autores,
       doc.directores,
       doc.sinodales,
-      doc.enlaceATesis,
+      doc.enlaceAPdf,
       // versiones,
       doc.palabrasClave,
       doc.year,
