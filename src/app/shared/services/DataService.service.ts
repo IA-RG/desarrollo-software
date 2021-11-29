@@ -10,6 +10,14 @@ import { VersionDeArchivo } from '../classes/VersionDeArchivo';
 export class DataService {
   constructor(private db: AngularFirestore,private http:HttpClient) {}
 
+  ////////////////////////////////////Profesores//////////////////////////////////////
+
+  getHistorial(id:string)
+  {
+    return this.http.get(`http://localhost:3000/profesor/tesis/${id}`);
+  }
+  ////////////////////////////////////FIN Profesores//////////////////////////////////
+
   getProfesor()
   {
     return this.http.get("http://localhost:3000/profesor");

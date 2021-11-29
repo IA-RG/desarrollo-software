@@ -2,6 +2,8 @@ import { Observable, Subject } from 'rxjs';
 import { VersionDeArchivo } from './VersionDeArchivo';
 
 export class Tesis {
+
+  [key:string]:string | string[] | number | boolean | Subject<boolean> | any;
   private _numeroDeTT: string;
   private _titulo: string;
   private _autores: string[];

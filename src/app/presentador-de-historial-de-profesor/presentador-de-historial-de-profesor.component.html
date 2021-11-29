@@ -1,7 +1,21 @@
 <div class="container-fluid">
+  <h1 class="fw-bold display-5 text-center mt-2 mb-0">Historial de tesis</h1>
   <div class="row">
-    <div class="col">
-      
+    <app-formulario [formulario]="formulario" (emisorDeDatos)="buscar($event)"></app-formulario>
+    <app-presentador-de-tesis
+        [tesisRecibidas]="resultado"
+      ></app-presentador-de-tesis>
+    <div class="col-lg-6">
+      <h2 class="fs-1">Director</h2>
+      <app-presentador-de-tesis
+        [tesisRecibidas]="director"
+      ></app-presentador-de-tesis>
+    </div>
+    <div class="col-lg-6">
+      <h2 class="fs-1">Sinodal</h2>
+      <app-presentador-de-tesis
+        [tesisRecibidas]="sinodal"
+      ></app-presentador-de-tesis>
     </div>
   </div>
 </div>

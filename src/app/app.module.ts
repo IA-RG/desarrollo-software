@@ -21,6 +21,7 @@ import { DataService } from './shared/services/DataService.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { PresentadorDeHistorialDeProfesorComponent } from './presentador-de-historial-de-profesor/presentador-de-historial-de-profesor.component';
+import { PresentadorDeTesisComponent } from './presentador-de-tesis/presentador-de-tesis.component';
 
 
 
@@ -33,6 +34,7 @@ import { PresentadorDeHistorialDeProfesorComponent } from './presentador-de-hist
     AdministradorDeTesisComponent,
     RegistradorDeTesisComponent,
     PresentadorDeHistorialDeProfesorComponent,
+    PresentadorDeTesisComponent,
   ],
   imports: [
     BrowserModule,
