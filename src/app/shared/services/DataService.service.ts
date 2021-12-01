@@ -116,8 +116,12 @@ export class DataService {
     });
     //const options = term ? { params: new HttpParams().set('info', term) } : {};
     //return this.http.post(`http://localhost:3000/tesis/${info}`, options );
-    return this.http.post(`http://localhost:3000/tesis/`,info, {headers: headers} ).subscribe(data=>{
-      console.log(data);
+    return this.http.post(`http://localhost:3000/tesis/`,info, {observe:'response', headers: headers} ).subscribe(data=>{
+      let values = Object.values(data);
+      console.log(data.body)
+      //console.log(entries[6], values[6]);
+      return values[6];
+      //console.log(JSON.parse(data.body?.toString));
     });
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFireStorage } from '@angular/fire/storage';
+import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { Formulario } from '../shared/classes/Formulario';
 import { Pregunta } from '../shared/classes/Pregunta';
@@ -34,6 +35,7 @@ export class RegistradorDeTesisComponent implements OnInit {
   mensajes: string[] = [];
   mostrar = false;
   val: number = 0;
+  private _result: any;
   enlace: string[] = [];
   constructor(private dataService: DataService, private store: FirebaseApp, private _store: AngularFireStorage) {
    const formulario: Pregunta<string | number | boolean>[] = [
@@ -55,7 +57,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       }),
       new Pregunta<string>({
         key: 'integrante1Nombre',
-        label: 'Tu nombre (Nombre del primer integrante)',
+        label: 'Nombre del primer integrante',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -63,7 +65,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       }),
       new Pregunta<string>({
         key: 'integrante1APp',
-        label: 'Tu apellido paterno (Apellido paterno del primer integrante)',
+        label: 'Apellido paterno del primer integrante',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -71,7 +73,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       }),
       new Pregunta<string>({
         key: 'integrante1APm',
-        label: 'Tu apellido materno (Apellido materno del primer integrante)',
+        label: 'Apellido materno del primer integrante',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -323,81 +325,100 @@ export class RegistradorDeTesisComponent implements OnInit {
     this._tituloT = arr[1];
     //console.log(this._tituloT);
     //informacion de los integrantes
-    nombre.push(arr[2]);
-    nombre.push(arr[3]);
-    nombre.push(arr[4]);
-    //tenemos el nombre completo del primer integrante
-    cadena = nombre.join(',');
-    this._integrantes.push(cadena);
+    if(arr[2]!='' && arr[3]!='' && arr[4]!=''){//PRIMER INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS
+      nombre.push(arr[2]);
+      nombre.push(arr[3]);
+      nombre.push(arr[4]);
+      //console.log(nombre)
+      //tenemos el nombre completo del primer integrante
+      cadena = nombre.join(',');
+      this._integrantes.push(cadena);
+    }
     nombre = [];
     cadena = "";
     //this._integrantes.push(";");
-    nombre.push(arr[5]);
-    nombre.push(arr[6]);
-    nombre.push(arr[7]);
-    //tenemos el nombre completo del segundo integrante
-    cadena = nombre.join(',');
-    this._integrantes.push(cadena);
+    if(arr[5]!=''){//SEGUNDO INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS
+      nombre.push(arr[5]);
+      nombre.push(arr[6]);
+      nombre.push(arr[7]);
+      //console.log(nombre)
+      //tenemos el nombre completo del segundo integrante
+      cadena = nombre.join(',');
+      this._integrantes.push(cadena);
+    }
     nombre = [];
     cadena = "";
     //this._integrantes.push(";");
-    nombre.push(arr[8]);
-    nombre.push(arr[9]);
-    nombre.push(arr[10]);
-    //tenemos el nombre completo del tercer integrante
-    cadena = nombre.join(',');
-    this._integrantes.push(cadena);
+    if(arr[8]!=''){//TERCER INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS 
+      nombre.push(arr[8]);
+      nombre.push(arr[9]);
+      nombre.push(arr[10]);
+      //console.log(nombre)
+      //tenemos el nombre completo del tercer integrante
+      cadena = nombre.join(',');
+      this._integrantes.push(cadena);
+    }
     nombre = [];
     cadena = "";
     //this._integrantes.push(";");
     /*************************Terminamos de obtener los datos de integrantes*************************/
     //Obtenemos la información de director
-    nombre.push(arr[11]);
-    nombre.push(arr[12]);
-    nombre.push(arr[13]);
-    //console.log(nombre);
-    //tenemos el nombre completo del primer director
-    cadena = nombre.join(',');
-    this._directores.push(cadena);
+    if(arr[11]!=''){
+      nombre.push(arr[11]);
+      nombre.push(arr[12]);
+      nombre.push(arr[13]);
+      //console.log(nombre);
+      //tenemos el nombre completo del primer director
+      cadena = nombre.join(',');
+      this._directores.push(cadena);
+    }
     nombre = [];
     cadena = "";
     //this._directores.push(";");
-    nombre.push(arr[14]);
-    nombre.push(arr[15]);
-    nombre.push(arr[16]);
-    //console.log(nombre);
-    //tenemos el nombre completo del segundo director
-    cadena = nombre.join(',');
-    this._directores.push(cadena);
+    if(arr[14]!=''){
+      nombre.push(arr[14]);
+      nombre.push(arr[15]);
+      nombre.push(arr[16]);
+      //console.log(nombre);
+      //tenemos el nombre completo del segundo director
+      cadena = nombre.join(',');
+      this._directores.push(cadena);
+    }
     nombre = [];
     cadena = "";
     //this._directores.push(";");
     /*************************Terminamos de obtener los datos de directores*************************/
      //Obtenemos la información de sinodal
-     nombre.push(arr[17]);
-     nombre.push(arr[18]);
-     nombre.push(arr[19]);
-     //tenemos el nombre completo del primer sinodal
-     cadena = nombre.join(',');
-     this._sinodales.push(cadena);
+     if(arr[17]!=''){
+      nombre.push(arr[17]);
+      nombre.push(arr[18]);
+      nombre.push(arr[19]);
+      //tenemos el nombre completo del primer sinodal
+      cadena = nombre.join(',');
+      this._sinodales.push(cadena);
+     }
      nombre = [];
      cadena = "";
      //this._sinodales.push(";");
-     nombre.push(arr[20]);
-     nombre.push(arr[21]);
-     nombre.push(arr[22]);
-     //tenemos el nombre completo del segundo sinodal
-     cadena = nombre.join(',');
-     this._sinodales.push(cadena);
+     if(arr[20]!=''){
+      nombre.push(arr[20]);
+      nombre.push(arr[21]);
+      nombre.push(arr[22]);
+      //tenemos el nombre completo del segundo sinodal
+      cadena = nombre.join(',');
+      this._sinodales.push(cadena);
+     }
      nombre = [];
      cadena = "";
      //this._sinodales.push(";");
-     nombre.push(arr[23]);
-     nombre.push(arr[24]);
-     nombre.push(arr[25]);
-     //tenemos el nombre completo del tercer sinodal
-     cadena = nombre.join(',');
-     this._sinodales.push(cadena);
+     if(arr[23]!=''){
+      nombre.push(arr[23]);
+      nombre.push(arr[24]);
+      nombre.push(arr[25]);
+      //tenemos el nombre completo del tercer sinodal
+      cadena = nombre.join(',');
+      this._sinodales.push(cadena);
+     }
      nombre = [];
      cadena = "";
      //this._sinodales.push(";");
@@ -414,7 +435,9 @@ export class RegistradorDeTesisComponent implements OnInit {
     this.file = datos.file;
 
 
-
+    console.log(this._integrantes.length);
+    console.log(this._directores.length);
+    console.log(this._sinodales.length);
     /***LIMPIAMOS LAS VARIABLES USADAS****/
     arr = [];
     nombre = [];
@@ -422,9 +445,10 @@ export class RegistradorDeTesisComponent implements OnInit {
     //console.log(this.file);
     //this.mostrarInformacion();
     this.limpiaMensajes(0);
-    this.pruebaFIRE();
+    //this.pruebaFIRE();
     //this.enviaDatosAbase();
-    //this.validaDatos();
+    this.validaDatos();
+    //this.resetVariables();
   }
   public get formulario(): Formulario {
     return this._formulario;
@@ -475,12 +499,12 @@ export class RegistradorDeTesisComponent implements OnInit {
       this.mensajes.push("El número de integrantes no es correcto, dado que solo se acepta el siguiente rango de un caracter hasta 4 caracteres.");
     }
     //para los sinodales y directores serían el mismo, minimo es uno maximo 2 para los directires y 3 como maximo para los sinodales
-    if (this._directores.length < 1 || this._directores.length > 4 || this._directores.length === 0) {
-      this.mensajes.push("El número de directores no corresponde con el rango aceptado de un caracter hasta 2 caracteres.");
+    if (this._directores.length < 1 || this._directores.length > 2 || this._directores.length === 0) {
+      this.mensajes.push("El número de directores no corresponde con el rango aceptado de un minimo uno hasta 2 directores por tesis.");
 
     }
     //para los sinodales
-    if (this._sinodales.length < 1 || this._sinodales.length > 4 || this._sinodales.length === 0) {
+    if (this._sinodales.length < 1 || this._sinodales.length > 3 || this._sinodales.length === 0) {
       this.mensajes.push("El número de sinodales no corresponda al rango aceptado de hasta maximo 3 sinodales.");
     }
 
@@ -601,6 +625,18 @@ export class RegistradorDeTesisComponent implements OnInit {
     })).subscribe();
 
 
+  }
+
+  public resetVariables(){
+    this._integrantes = [];
+    this._directores = [];
+    this._directores = [];
+    this._sinodales = [];
+    this._pClave = [];
+    this._year = 0;
+    this._carrera = "";
+    this._grado = "";
+    this._resumen = "";
   }
 }
 
