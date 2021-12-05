@@ -4,7 +4,7 @@ const cors = require("cors");
 //const env = require("./functions/envvar");
 const tesisFunctions = require("./functions/tesis");
 const consultas = require("./functions/consultas2");
-const _ = require("loadsh");
+const _ = require("lodash");
 
 const connection = mysql.createConnection({
   host: "localhost",
