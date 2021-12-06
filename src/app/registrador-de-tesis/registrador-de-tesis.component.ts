@@ -540,12 +540,15 @@ export class RegistradorDeTesisComponent implements OnInit {
     if (this.tamArchivo < 300000 || this.tamArchivo > 6000000) {
       var tam = ['Byte', 'KB', 'MB'];
       if (this.tamArchivo == 0) {
-        this.mensajes.push("El tamaño del archivo no es aceptado de 600 KB hasta 3000 KB, el que agregaste tiene este tamaño: " + this.tamArchivo + " Byte");
+        this.mensajes.push("El tamaño del archivo no es aceptado de 300 KB hasta 6000  KB, el que agregaste tiene este tamaño: " + this.tamArchivo + " Byte");
       } else {
         let tamano: number = parseInt(this.tamArchivo);
         let i = Math.floor(Math.log(tamano) / Math.log(1024));
-        this.mensajes.push("El tamaño del archivo no es aceptado de 600 KB hasta 3000 KB, el que agregaste tiene este tamaño: " + Math.round(tamano / Math.pow(1024, i)) + " " + tam[i]);
+        this.mensajes.push("El tamaño del archivo no es aceptado de 300 KB hasta 6000 KB, el que agregaste tiene este tamaño: " + Math.round(tamano / Math.pow(1024, i)) + " " + tam[i]);
       }
+
+
+    }
 
 
     }
