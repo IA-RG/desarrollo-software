@@ -425,6 +425,9 @@ export class RegistradorPropuestasComponent implements OnInit {
       this.mensajes.push("El número de sinodales no es correcto, debe de estar registrados minimo 1 hasta 3 sinodales por protocolo.");
     }
     //Palabras clave - terminar
+    if(this._tipoArchivo != "application/pdf"){
+      this.mensajes.push("El tipo del archivo no es PDF, compruebelo.");
+    }
     if (this.tamArchivo < 300000 || this.tamArchivo > 6000000){
       var tam = ['Byte', 'KB', 'MB'];
       if (this.tamArchivo == 0) {
