@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BuscadorComponent } from './buscador/buscador.component';
 import { PresentadorDeHistorialDeProfesorComponent } from './presentador-de-historial-de-profesor/presentador-de-historial-de-profesor.component';
 import { RegistradorDeTesisComponent } from './registrador-de-tesis/registrador-de-tesis.component';
+import { RegistradorPropuestasComponent } from './registrador-propuestas/registrador-propuestas.component';
 
 const routes: Routes = [{
   path: 'busqueda',
@@ -16,6 +17,10 @@ const routes: Routes = [{
     path:'profesor/historial',
     component: PresentadorDeHistorialDeProfesorComponent
     
+  },
+  {
+    path: 'registro-protocolo',
+    component: RegistradorPropuestasComponent,
   }
 ];
 

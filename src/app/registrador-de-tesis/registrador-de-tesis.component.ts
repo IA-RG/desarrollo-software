@@ -38,7 +38,7 @@ export class RegistradorDeTesisComponent implements OnInit {
   private _result: any;
   enlace: string[] = [];
   constructor(private dataService: DataService, private store: FirebaseApp, private _store: AngularFireStorage) {
-   const formulario: Pregunta<string | number | boolean>[] = [
+    const formulario: Pregunta<string | number | boolean>[] = [
       new Pregunta<string>({
         key: 'nummT',
         label: 'Número de tesis',
@@ -57,7 +57,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       }),
       new Pregunta<string>({
         key: 'integrante1Nombre',
-        label: 'Nombre del primer integrante',
+        label: 'Datos de usuario registrado. \nNombre del primer integrante',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -310,7 +310,7 @@ export class RegistradorDeTesisComponent implements OnInit {
   capturarDatos(datos: { formData: Object; file: File | null }) {
     console.log(datos);
     var arr = [];
-    let nombre : string[] = [];
+    let nombre: string[] = [];
     let cadena = "";
     let cadInteg: string;
     let direct: string;
@@ -324,20 +324,32 @@ export class RegistradorDeTesisComponent implements OnInit {
     this._numeroT = arr[0];
     this._tituloT = arr[1];
     //console.log(this._tituloT);
+    //EXPRESIONES REGULARES 
+    //NOMBRE: /^([A-ZÁÉÍÓÚ]{1}[a-zñáéíóú]+[\s]*)+$/
+    //APELLIDOS: 
     //informacion de los integrantes
-    if(arr[2]!='' && arr[3]!='' && arr[4]!=''){//PRIMER INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS
-      nombre.push(arr[2]);
-      nombre.push(arr[3]);
-      nombre.push(arr[4]);
-      //console.log(nombre)
-      //tenemos el nombre completo del primer integrante
-      cadena = nombre.join(',');
-      this._integrantes.push(cadena);
+    if (arr[2] != '' && arr[3] != '' && arr[4] != '') {//PRIMER INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS
+      let nombreReg, appReg, apmReg;
+      nombreReg = arr[2];
+      appReg = arr[3];
+      apmReg = arr[4];
+      if (nombreReg.match(/^([A-ZÁÉÍÓÚ]{1}[a-zñáéíóú]+[\s]*)+$/) && appReg.match(/^([A-ZÁÉÍÓÚ]{1}[a-zñáéíóú]+[\s]*)+$/) && apmReg.match(/^([A-ZÁÉÍÓÚ]{1}[a-zñáéíóú]+[\s]*)+$/)) {
+        nombre.push(arr[2]);
+        nombre.push(arr[3]);
+        nombre.push(arr[4]);
+        //console.log(nombre)
+        //tenemos el nombre completo del primer integrante
+        cadena = nombre.join(',');
+        this._integrantes.push(cadena);
+      }else{
+        console.error("ERROR: nombre primer integrante");
+      }
+
     }
     nombre = [];
     cadena = "";
     //this._integrantes.push(";");
-    if(arr[5]!=''){//SEGUNDO INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS
+    if (arr[5] != '') {//SEGUNDO INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS
       nombre.push(arr[5]);
       nombre.push(arr[6]);
       nombre.push(arr[7]);
@@ -349,7 +361,7 @@ export class RegistradorDeTesisComponent implements OnInit {
     nombre = [];
     cadena = "";
     //this._integrantes.push(";");
-    if(arr[8]!=''){//TERCER INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS 
+    if (arr[8] != '' && arr[9] != '' && arr[10] != '') {//TERCER INTEGRANTE, COMPROBAMOS QUE TODOS LOS DATOS ESTEN LLENOS 
       nombre.push(arr[8]);
       nombre.push(arr[9]);
       nombre.push(arr[10]);
@@ -363,7 +375,7 @@ export class RegistradorDeTesisComponent implements OnInit {
     //this._integrantes.push(";");
     /*************************Terminamos de obtener los datos de integrantes*************************/
     //Obtenemos la información de director
-    if(arr[11]!=''){
+    if (arr[11] != '' && arr[12] != '' && arr[13] != '') {
       nombre.push(arr[11]);
       nombre.push(arr[12]);
       nombre.push(arr[13]);
@@ -375,7 +387,7 @@ export class RegistradorDeTesisComponent implements OnInit {
     nombre = [];
     cadena = "";
     //this._directores.push(";");
-    if(arr[14]!=''){
+    if (arr[14] != '' && arr[15] != '' && arr[16] != '') {
       nombre.push(arr[14]);
       nombre.push(arr[15]);
       nombre.push(arr[16]);
@@ -388,41 +400,41 @@ export class RegistradorDeTesisComponent implements OnInit {
     cadena = "";
     //this._directores.push(";");
     /*************************Terminamos de obtener los datos de directores*************************/
-     //Obtenemos la información de sinodal
-     if(arr[17]!=''){
+    //Obtenemos la información de sinodal
+    if (arr[17] != '' && arr[18] != '' && arr[19] != '') {
       nombre.push(arr[17]);
       nombre.push(arr[18]);
       nombre.push(arr[19]);
       //tenemos el nombre completo del primer sinodal
       cadena = nombre.join(',');
       this._sinodales.push(cadena);
-     }
-     nombre = [];
-     cadena = "";
-     //this._sinodales.push(";");
-     if(arr[20]!=''){
+    }
+    nombre = [];
+    cadena = "";
+    //this._sinodales.push(";");
+    if (arr[20] != '' && arr[21] != '' && arr[22] != '') {
       nombre.push(arr[20]);
       nombre.push(arr[21]);
       nombre.push(arr[22]);
       //tenemos el nombre completo del segundo sinodal
       cadena = nombre.join(',');
       this._sinodales.push(cadena);
-     }
-     nombre = [];
-     cadena = "";
-     //this._sinodales.push(";");
-     if(arr[23]!=''){
+    }
+    nombre = [];
+    cadena = "";
+    //this._sinodales.push(";");
+    if (arr[23] != '' && arr[24] != '' && arr[25] != '') {
       nombre.push(arr[23]);
       nombre.push(arr[24]);
       nombre.push(arr[25]);
       //tenemos el nombre completo del tercer sinodal
       cadena = nombre.join(',');
       this._sinodales.push(cadena);
-     }
-     nombre = [];
-     cadena = "";
-     //this._sinodales.push(";");
-    
+    }
+    nombre = [];
+    cadena = "";
+    //this._sinodales.push(";");
+
     this._nArchivo = arr[26];
     pC = arr[27];
     this._pClave = pC.split(',');
@@ -435,16 +447,14 @@ export class RegistradorDeTesisComponent implements OnInit {
     this.file = datos.file;
 
 
-    console.log(this._integrantes.length);
-    console.log(this._directores.length);
-    console.log(this._sinodales.length);
+
     /***LIMPIAMOS LAS VARIABLES USADAS****/
     arr = [];
     nombre = [];
     cadena = "";
     //console.log(this.file);
     //this.mostrarInformacion();
-    this.limpiaMensajes(0);
+    this.limpiaMensajes();
     //this.pruebaFIRE();
     //this.enviaDatosAbase();
     this.validaDatos();
@@ -491,10 +501,21 @@ export class RegistradorDeTesisComponent implements OnInit {
       this.mensajes.push("El número de tesis no cuenta con la longitud minima de 5 caracteres.");
     }
     //comprobamos de que el titulo debe de ser mayor a 20 con la finalidad de obtener el titulo del trabajo completo
-    if (this._tituloT.length < 20) {
-      this.mensajes.push("El número de la longitud del titulo no corresponde con el minimo requerido de 20 caracteres.");
+    if (this._tituloT.length < 10 || this._tituloT.length > 300) {
+      this.mensajes.push("El número de la longitud del titulo no corresponde con lo miniamo de 10 y máximo establecido de 300 caracteres.");
     }
     //debemos de considerar el caso de que sean los integrantes de uno hasta 4
+    console.log(this._integrantes, this._directores, this._sinodales, this._pClave);
+    if (this._integrantes.length < 1 || this._integrantes.length > 3) {
+      this.mensajes.push("El número de integrantes no es correcto, debe de estar registrados minimo 1 hasta 3 integrantes por tesis.");
+    }
+    if (this._directores.length < 1 || this._directores.length > 2) {
+      this.mensajes.push("El número de directores no es correcto, debe de estar registrados minimo 1 hasta 2 directores por tesis.");
+    }
+    if (this._sinodales.length < 1 || this._sinodales.length > 3) {
+      this.mensajes.push("El número de sinodales no es correcto, debe de estar registrados minimo 1 hasta 3 sinodales por tesis.");
+    }
+    /*
     if (this._integrantes.length < 1 || this._integrantes.length > 4 || this._integrantes.length === 0) {
       this.mensajes.push("El número de integrantes no es correcto, dado que solo se acepta el siguiente rango de un caracter hasta 4 caracteres.");
     }
@@ -511,12 +532,32 @@ export class RegistradorDeTesisComponent implements OnInit {
     if (this._pClave.length < 1 && this._pClave.length > 2) {
       this.mensajes.push("Las palabras clave no son aceptadas, dado que no hay o no estan bien definidas.");
     }
+    */
     if (this._tipoArchivo != "application/pdf") {
       this.mensajes.push("El tipo del archivo no es PDF.");
     }
     //rango del tamaño del archivo 
-    if (this.tamArchivo < 300000 || this.tamArchivo > 3000000) {
-      this.mensajes.push("El tamaño del archivo no es aceptado de 600 KB hasta 3000 KB.");
+    if (this.tamArchivo < 300000 || this.tamArchivo > 6000000) {
+      var tam = ['Byte', 'KB', 'MB'];
+      if (this.tamArchivo == 0) {
+        this.mensajes.push("El tamaño del archivo no es aceptado de 600 KB hasta 3000 KB, el que agregaste tiene este tamaño: " + this.tamArchivo + " Byte");
+      } else {
+        let tamano: number = parseInt(this.tamArchivo);
+        let i = Math.floor(Math.log(tamano) / Math.log(1024));
+        this.mensajes.push("El tamaño del archivo no es aceptado de 600 KB hasta 3000 KB, el que agregaste tiene este tamaño: " + Math.round(tamano / Math.pow(1024, i)) + " " + tam[i]);
+      }
+
+
+    }
+    //logitud del resumen debe de ser mayor a 0 caracteres y menor a 400 [dada la base de datos]
+    if (this._resumen.length < 50 || this._resumen.length > 400) {
+      this.mensajes.push("La longitud del resumen de la tesis es mayor a lo permitido, lo cual es de 50 a 400 caracteres.");
+    }
+    if (this._carrera.length < 10 || this._carrera.length > 200) {
+      this.mensajes.push("La longitud de la carrera no es aceptada, dado que no cumple con el rango de 10 a 200 caracteres.");
+    }
+    if (this._grado.length < 10 || this._grado.length > 50) {
+      this.mensajes.push("La longitud del grado a obtener no es aceptado, dado que debe de cumplir con el rango de 10 a 50 caracteres.");
     }
     /*
     Estos datos son dados los que yo encontre a lo largo de diferentes tesis
@@ -526,53 +567,34 @@ export class RegistradorDeTesisComponent implements OnInit {
      */
     //Comprobamos que si no hay mensajes que mostrar pasamos a la siguiente fase
     if (this.mensajes.length != 0) {
+      window.scrollTo(0, 0);
       console.log("ERRORES:\n" + this.mensajes);
       this.mostrar = true;
       this.val = 1;
       console.log(this.mostrar);
     } else {
+      window.scrollTo(0, 0);
       console.log("TODA LA INFORMACIÓN ES CORRECTA :)");
       this.mostrar = false;
       this.val = 2;
       this.pruebaFIRE();
-      window.scrollTo(0, 0);
       const elemento = <HTMLElement>document.getElementById("form");
       elemento.style.display = 'none';
-      window.setTimeout(()=>{
+      window.setTimeout(() => {
         const contenedor = <HTMLElement>document.getElementById("contenedor_carga");
         const spinner = <HTMLElement>document.getElementById("carga");
         spinner.style.display = 'none';
         const mostrarControles = <HTMLElement>document.getElementById("controles");
         mostrarControles.style.display = 'flex';
       }, 4000);
-
       //antes debemos de almacenar el archivo
       //console.log("enlace",this._nArchivo)
 
     }
   }
-  public limpiaMensajes(num : number): void {
-    if(num == 0){
+  public limpiaMensajes(): void {
       this.mensajes = [];
       this.enlace = [];
-    }else if(num == 1){
-      this._numeroT = "";
-      this._tituloT = "";
-      this._integrantes = [];
-      this._directores = [];
-      this._sinodales = [];
-      this._nArchivo = '';
-      this._pClave = [];
-      this._year = 0;
-      this._carrera = "";
-      this._grado = "";
-      this._resumen = "";
-      this.tamArchivo = 0;
-      this._tipoArchivo = "";
-      this.file = "";
-
-
-    }
 
   }
   public enviaDatosAbase(): void {
@@ -589,17 +611,18 @@ export class RegistradorDeTesisComponent implements OnInit {
       'grado': this._grado,
       'resumen': this._resumen
     };
+    console.log(infoFormulario)
     this.dataService.guardarTesis(infoFormulario);
   }
   public pruebaFIRE() {
     const file = this.file;
     const storage = this.store.storage();
-    const ref = storage.ref('pdf/' + file.name);
+    const ref = storage.ref('pdf/tesis/' + file.name);
     const uplad = ref.put(file);
     let enlaceGuardado: string[] = [];
     let i = 0;
-    const fileRef = this._store.ref("pdf/" + file.name);
-    const task = this._store.upload("pdf/" + file.name, file);
+    const fileRef = this._store.ref("pdf/tesis/" + file.name);
+    const task = this._store.upload("pdf/tesis/" + file.name, file);
     /*uplad.on('state-changed', function (snapshot) {
       console.log((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
     }, function (error) { console.log(error) },  ()=> {
@@ -614,20 +637,22 @@ export class RegistradorDeTesisComponent implements OnInit {
     this.limpiaMensajes();*/
     task.snapshotChanges().pipe(finalize(async () => {
       this.enlace.push(
-        await fileRef.getDownloadURL().toPromise().catch((error) => {}).catch((error) => {})
+        await fileRef.getDownloadURL().toPromise().catch((error) => { }).catch((error) => { })
       );
       //console.log(this.enlace);
       let cadena = this.enlace[i];
       this._nArchivo = cadena;
       this.enviaDatosAbase();
-      this.limpiaMensajes(1);
-      //this.enviaDatosAbase();
+      this.resetVariables();
+      this.enviaDatosAbase();
     })).subscribe();
 
 
   }
 
-  public resetVariables(){
+  public resetVariables() {
+    this._numeroT = "";
+    this._tituloT = "";
     this._integrantes = [];
     this._directores = [];
     this._directores = [];

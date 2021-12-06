@@ -108,7 +108,7 @@ export class DataService {
     );
   }
   guardarTesis(info : any){
-    //console.log(info);
+    console.log(info);
     //peticion post
     //const term = info.trim();
     let headers = new HttpHeaders({
@@ -120,8 +120,17 @@ export class DataService {
       let values = Object.values(data);
       console.log(data.body)
       //console.log(entries[6], values[6]);
-      return values[6];
+      //return values[6];
       //console.log(JSON.parse(data.body?.toString));
+    });
+  }
+  guardarProtocolo(info : any){
+    console.log(info);
+    let headers = new HttpHeaders({
+      'Content-Type':'application/json'
+    });
+    this.http.post(`http://localhost:3000/protocolos/`, info, {headers:headers}).subscribe(data=>{
+      console.log(data);
     });
   }
 }

@@ -22,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { PresentadorDeHistorialDeProfesorComponent } from './presentador-de-historial-de-profesor/presentador-de-historial-de-profesor.component';
 import { PresentadorDeTesisComponent } from './presentador-de-tesis/presentador-de-tesis.component';
+import { RegistradorPropuestasComponent } from './registrador-propuestas/registrador-propuestas.component';
 
 
 
@@ -35,6 +36,7 @@ import { PresentadorDeTesisComponent } from './presentador-de-tesis/presentador-
     RegistradorDeTesisComponent,
     PresentadorDeHistorialDeProfesorComponent,
     PresentadorDeTesisComponent,
+    RegistradorPropuestasComponent,
   ],
   imports: [
     BrowserModule,
