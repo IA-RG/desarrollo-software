@@ -1163,6 +1163,17 @@ app.post("/tesis", (req, res) => {
                                       );
                                     }
                                     if (longitud == 3) {
+                                                                           
+                                      let sql_insert_autor2 = `INSERT INTO AUTOR(nombre, apellidoPaterno, apellidoMaterno, fk_tesis) VALUES ('${autor2[0]}', '${autor2[1]}', '${autor2[2]}', ${idTesis})`;
+                                      connection.query(
+                                        sql_insert_autor2,
+                                        (errorAutor2, resultAutor2) => {
+                                          if (errorAutor2) {
+                                            console.log(errorAutor2.message);
+                                            errores = 1;
+                                          }
+                                        }
+                                      );
                                       let sql_insert_autor3 = `INSERT INTO AUTOR(nombre, apellidoPaterno, apellidoMaterno, fk_tesis) VALUES ('${autor3[0]}', '${autor3[1]}', '${autor3[2]}', ${idTesis})`;
                                       connection.query(
                                         sql_insert_autor3,
