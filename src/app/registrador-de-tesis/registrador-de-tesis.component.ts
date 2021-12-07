@@ -308,6 +308,7 @@ export class RegistradorDeTesisComponent implements OnInit {
 
   ngOnInit(): void { }
   capturarDatos(datos: { formData: Object; file: File | null }) {
+    this.resetVariables();
     console.log(datos);
     var arr = [];
     let nombre: string[] = [];
@@ -546,9 +547,6 @@ export class RegistradorDeTesisComponent implements OnInit {
         let i = Math.floor(Math.log(tamano) / Math.log(1024));
         this.mensajes.push("El tamaño del archivo no es aceptado de 300 KB hasta 6000 KB, el que agregaste tiene este tamaño: " + Math.round(tamano / Math.pow(1024, i)) + " " + tam[i]);
       }
-
-
-    }
 
 
     }
