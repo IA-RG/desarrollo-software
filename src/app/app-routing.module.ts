@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AdministradorDeTesisComponent } from './administrador-de-tesis/administrador-de-tesis.component';
 import { BuscadorComponent } from './buscador/buscador.component';
 import { PresentadorDeHistorialDeProfesorComponent } from './presentador-de-historial-de-profesor/presentador-de-historial-de-profesor.component';
 import { RegistradorDeTesisComponent } from './registrador-de-tesis/registrador-de-tesis.component';
@@ -21,6 +22,10 @@ const routes: Routes = [{
   {
     path: 'registro-protocolo',
     component: RegistradorPropuestasComponent,
+  },
+  {
+    path: 'administrador-tesis',
+    component: AdministradorDeTesisComponent,
   }
 ];
 
