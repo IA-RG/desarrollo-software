@@ -2214,6 +2214,7 @@ app.post("/protocolos", (req, res)=>{
                             }
                             //autores
                             if (longitud == 2) {
+                              let sql_insert_autor2 = `INSERT INTO autorprotocolo(nombre, apellidoPaterno, apellidoMaterno, fk_protocolo) VALUES ('${autor2[0]}', '${autor2[1]}', '${autor2[2]}', ${idProto})`;
                               let sql_select_autor2 = `SELECT count(*) as registro FROM autorprotocolo Where (nombre  = '${autor2[0]}' AND apellidoPaterno = '${autor2[1]}' AND apellidoMaterno = '${autor2[2]}')`;
                               connection.query(sql_select_autor2, (errorSelectAutor2, resultSelectAutor2)=>{
                                 if(!errorSelectAutor2){
@@ -2323,6 +2324,7 @@ app.post("/protocolos", (req, res)=>{
     
 
 });
+
 
 app.listen(3000, function () {
   console.log("runnin at 3000");
