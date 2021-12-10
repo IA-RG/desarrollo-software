@@ -645,7 +645,7 @@ export class RegistradorDeTesisComponent implements OnInit {
       this._nArchivo = cadena;
       this.enviaDatosAbase();
       this.resetVariables();
-      this.enviaDatosAbase();
+      //this.enviaDatosAbase();
     })).subscribe();
 
 
