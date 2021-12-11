@@ -1324,8 +1324,11 @@ app.post("/protocolos", (req, res)=>{
   }
   
       let sql_select_idAutor1_usuario = `SELECT uid FROM estudiante WHERE nombre = '${autor1[0]}' AND apellidoPaterno = '${autor1[1]}' AND apellidoMaterno = '${autor1[2]}'`;
+      //console.log("ID SINODAL 1", sino1[1][0],sino1[1][1], sino1[1][2], sino1[1][3]);
       
+      //console.log(idSinodal1, idSinodal2, idSinodal3);
       //console.log(sql_select_idAutor1_usuario);
+      
       connection.query(sql_select_idAutor1_usuario, (err, result)=>{
         if(!err){
           //console.log(result[0].uid);
@@ -1672,236 +1675,141 @@ app.post("/protocolos", (req, res)=>{
                             }
                             //sinodales
                             if (longSino == 1) {
-                              //console.log("ESTA LLENO EL 1");
-                              let sql_select_profesor_sinodal1 = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
-                              connection.query(
-                                sql_select_profesor_sinodal1,
-                                (errorSPS1, resultSPS1) => {
-                                  //no tenemos error
-                                  if (!errorSPS1) {
-                                    let idProfe = 0;
-                                    idProfe = JSON.parse(
-                                      JSON.stringify(resultSPS1)
-                                    );
-                                    if (
-                                      Object.keys(idProfe).length === 0
-                                    ) {
-                                      //no encontramos nada, insertamos
-                                      let sql_insert_profesor_sinodal1 = `INSERT INTO PROFESOR(nombre, apellidoPaterno, apellidoMaterno) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}')`;
-                                      connection.query(
-                                        sql_insert_profesor_sinodal1,
-                                        (errSino1, resultSino1) => {
-                                          if (errSino1) {
-                                            console.log(
-                                              "ERROR SINO 1 " +
-                                                errSino1.message
-                                            );
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
-                                      let sql_select_profesor_sinodal1_creado = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
-                                      connection.query(
-                                        sql_select_profesor_sinodal1_creado,
-                                        (errBID, resultBID) => {
-                                          if (!errBID) {
-                                            let idBusqueda = JSON.parse(
-                                              JSON.stringify(resultBID)
-                                            );
-                                            let val = parseInt(
-                                              idBusqueda[0].id
-                                            );
-                                            idSinodal1 = val;
-                                            let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal1})`;
-                                            connection.query(
-                                              sql_insert_sinodal_protocolo1,
-                                              (
-                                                errSinodal,
-                                                resultSinodal
-                                              ) => {
-                                                if (errSinodal) {
-                                                  console.log(
-                                                    "error SINO 1,2 " +
-                                                      errSinodal.message
-                                                  );
-                                                  errores = 1;
-                                                }
+                              let sql_select_profesorUsuario = `SELECT uid FROM profesorusuario Where nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
+                              connection.query(sql_select_profesorUsuario, (erroSino1, resultSino1)=>{
+                                if(!erroSino1){
+                                  let consultaID =  JSON.parse(JSON.stringify(resultSino1));
+                                  if(Object.keys(consultaID).length ===0){
+                                    //console.log("NO SE ENCUENTRA EL NUMERO DE PROFESOR");   insertamos en el profesor usuario
+                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3];
+                                    let sql_insert_profesorUsuario = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}', '${idSinodal1}')`;
+                                    connection.query(sql_insert_profesorUsuario, (errorSino, resultSino)=>{
+                                      if(errorSino){
+                                        console.log("Error al crear el profesor usuario");
+                                        errores = 1;
+                                      }else{
+                                        //como creamos al profesor, insertamos directamente en la tabla de sinodal protocolo
+                                        let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal1}')`;
+                                          connection.query(
+                                            sql_insert_sinodal_protocolo1,
+                                            (errSinodal,resultSinodal) => {
+                                              if (errSinodal) {
+                                                console.log(
+                                                  "error SINO 1,2 " +
+                                                    errSinodal.message
+                                                );
+                                                errores = 1;
                                               }
-                                            );
-                                          } else {
-                                            console.log(
-                                              "ERROR SINO 1,3 " +
-                                                errBID.message
-                                            );
-                                            errores = 1;
-                                          }
+                                            }
+                                          );
+                                        
+                                      }
+                                    });
+
+                                  }else{
+                                    idSinodal1 = consultaID[0].uid;
+                                    //console.log("ECONTRAMOS AL USUARIO", idSinodal1)
+                                    //INSERTAMOS EN LA TABLA DE sinodal_protocolo
+                                    let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal1})`;
+                                    connection.query(
+                                      sql_insert_sinodal_protocolo1,
+                                      (
+                                        errSinodal,
+                                        resultSinodal
+                                      ) => {
+                                        if (errSinodal) {
+                                          console.log(
+                                            "error SINO 1,2 " +
+                                              errSinodal.message
+                                          );
+                                          errores = 1;
                                         }
-                                      );
-                                    } else {
-                                      let val = parseInt(idProfe[0].id);
-                                      //idSinodal.push(parseInt(idProfe[0].id));
-                                      //console.log(val);
-                                      idSinodal1 = val;
-                                      let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idTesis}, ${idSinodal1})`;
-                                      //console.log(sql_insert_sinodal_tesis1);
-                                      connection.query(
-                                        sql_insert_sinodal_protocolo1,
-                                        (errSinodal, resultSinodal) => {
-                                          if (errSinodal) {
-                                            console.log(
-                                              "error sino1,4 " +
-                                                errSinodal.message
-                                            );
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
-                                    }
-                                  } else {
-                                    console.log(
-                                      "error sino 1,5 " +
-                                        errorSPS1.message
+                                      }
                                     );
-                                    errores = 1;
                                   }
+                                  
+                                  
                                 }
-                              );
+                              });
                             }
+
                             if (longSino == 2) {
-                              //console.log("ESTA LLENO EL 1");
-                              let sql_select_profesor_sinodal1 = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
-                              connection.query(
-                                sql_select_profesor_sinodal1,
-                                (errorSPS1, resultSPS1) => {
-                                  //no tenemos error
-                                  if (!errorSPS1) {
-                                    let idProfe = 0;
-                                    idProfe = JSON.parse(
-                                      JSON.stringify(resultSPS1)
-                                    );
-                                    if (
-                                      Object.keys(idProfe).length === 0
-                                    ) {
-                                      //no encontramos nada, insertamos
-                                      let sql_insert_profesor_sinodal1 = `INSERT INTO PROFESOR(nombre, apellidoPaterno, apellidoMaterno) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}')`;
-                                      connection.query(
-                                        sql_insert_profesor_sinodal1,
-                                        (errSino1, resultSino1) => {
-                                          if (errSino1) {
-                                            console.log(
-                                              "ERROR SINO 1 " +
-                                                errSino1.message
-                                            );
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
-                                      let sql_select_profesor_sinodal1_creado = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
-                                      connection.query(
-                                        sql_select_profesor_sinodal1_creado,
-                                        (errBID, resultBID) => {
-                                          if (!errBID) {
-                                            let idBusqueda = JSON.parse(
-                                              JSON.stringify(resultBID)
-                                            );
-                                            let val = parseInt(
-                                              idBusqueda[0].id
-                                            );
-                                            idSinodal1 = val;
-                                            let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal1})`;
-                                            connection.query(
-                                              sql_insert_sinodal_protocolo1,
-                                              (
-                                                errSinodal,
-                                                resultSinodal
-                                              ) => {
-                                                if (errSinodal) {
-                                                  console.log(
-                                                    "error SINO 1,2 " +
-                                                      errSinodal.message
-                                                  );
-                                                  errores = 1;
-                                                }
+                              let sql_select_profesorUsuario = `SELECT uid FROM profesorusuario Where nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
+                              connection.query(sql_select_profesorUsuario, (erroSino1, resultSino1)=>{
+                                if(!erroSino1){
+                                  let consultaID =  JSON.parse(JSON.stringify(resultSino1));
+                                  if(Object.keys(consultaID).length ===0){
+                                    //console.log("NO SE ENCUENTRA EL NUMERO DE PROFESOR");   insertamos en el profesor usuario
+                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3];
+                                    let sql_insert_profesorUsuario = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}', '${idSinodal1}')`;
+                                    connection.query(sql_insert_profesorUsuario, (errorSino, resultSino)=>{
+                                      if(errorSino){
+                                        console.log("Error al crear el profesor usuario");
+                                      }else{
+                                        //como creamos al profesor, insertamos directamente en la tabla de sinodal protocolo
+                                        let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal1}')`;
+                                          connection.query(
+                                            sql_insert_sinodal_protocolo1,
+                                            (errSinodal,resultSinodal) => {
+                                              if (errSinodal) {
+                                                console.log(
+                                                  "error SINO 1,2 " +
+                                                    errSinodal.message
+                                                );
+                                                errores = 1;
                                               }
-                                            );
-                                          } else {
-                                            console.log(
-                                              "ERROR SINO 1,3 " +
-                                                errBID.message
-                                            );
-                                            errores = 1;
-                                          }
+                                            }
+                                          );
+                                        
+                                      }
+                                    });
+                          
+                                  }else{
+                                    idSinodal1 = consultaID[0].uid;
+                                    //console.log("ECONTRAMOS AL USUARIO", idSinodal1)
+                                    //INSERTAMOS EN LA TABLA DE sinodal_protocolo
+                                    let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal1}')`;
+                                    connection.query(
+                                      sql_insert_sinodal_protocolo1,
+                                      (
+                                        errSinodal,
+                                        resultSinodal
+                                      ) => {
+                                        if (errSinodal) {
+                                          console.log(
+                                            "error SINO 1,2 " +
+                                              errSinodal.message
+                                          );
+                                          errores = 1;
                                         }
-                                      );
-                                    } else {
-                                      let val = parseInt(idProfe[0].id);
-                                      //idSinodal.push(parseInt(idProfe[0].id));
-                                      //console.log(val);
-                                      idSinodal1 = val;
-                                      let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal1})`;
-                                      //console.log(sql_insert_sinodal_tesis1);
-                                      connection.query(
-                                        sql_insert_sinodal_protocolo1,
-                                        (errSinodal, resultSinodal) => {
-                                          if (errSinodal) {
-                                            console.log(
-                                              "error sino1,4 " +
-                                                errSinodal.message
-                                            );
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
-                                    }
-                                  } else {
-                                    console.log(
-                                      "error sino 1,5 " +
-                                        errorSPS1.message
+                                      }
                                     );
-                                    errores = 1;
                                   }
+                                  
+                                  
                                 }
-                              );
-                              let sql_select_profesor_sinodal2 = `SELECT id FROM profesor WHERE nombre = '${sino2[0]}' AND apellidoPaterno = '${sino2[1]}' AND apellidoMaterno = '${sino2[2]}'`;
+                              });
+                              //SEGUNDO SINODAL
+                              let sql_select_profesorUsuario_sino2 = `SELECT uid FROM profesorusuario WHERE nombre = '${sino2[0]}' AND apellidoPaterno = '${sino2[1]}' AND apellidoMaterno = '${sino2[2]}'`;
                               connection.query(
-                                sql_select_profesor_sinodal2,
+                                sql_select_profesorUsuario_sino2,
                                 (errorSPS2, resultSPS2) => {
                                   //no tenemos error
                                   if (!errorSPS2) {
                                     let idProfe = 0;
-                                    idProfe = JSON.parse(
-                                      JSON.stringify(resultSPS2)
-                                    );
-                                    if (
-                                      Object.keys(idProfe).length === 0
-                                    ) {
+                                    idProfe = JSON.parse(JSON.stringify(resultSPS2));
+                                    if (Object.keys(idProfe).length === 0) {
                                       //no encontramos nada, insertamos
-                                      let sql_insert_profesor_sinodal2 = `INSERT INTO PROFESOR(nombre, apellidoPaterno, apellidoMaterno) VALUES ('${sino2[0]}', '${sino2[1]}', '${sino2[2]}')`;
-                                      connection.query(
-                                        sql_insert_profesor_sinodal2,
-                                        (errSino2, resultSino2) => {
+                                      idSinodal2 = sino2[1][0]+sino2[1][1]+sino2[1][2]+sino2[1][3];//clave
+                                      let sql_insert_profesorUsuario_sinodal2 = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino2[0]}', '${sino2[1]}', '${sino2[2]}', '${idSinodal2}')`;
+                                      connection.query(sql_insert_profesorUsuario_sinodal2,(errSino2, resultSino2) => {
                                           if (errSino2) {
-                                            console.log(
-                                              errSino2.message
-                                            );
+                                            console.log(errSino2.message);
                                             errores = 1;
-                                          }
-                                        }
-                                      );
-                                      let sql_select_profesor_sinodal2_creado = `SELECT id FROM profesor WHERE nombre = '${sino2[0]}' AND apellidoPaterno = '${sino2[1]}' AND apellidoMaterno = '${sino2[2]}'`;
-                                      connection.query(
-                                        sql_select_profesor_sinodal2_creado,
-                                        (errBID, resultBID) => {
-                                          if (!errBID) {
-                                            let idBusqueda = JSON.parse(
-                                              JSON.stringify(resultBID)
-                                            );
-                                            let val = parseInt(
-                                              idBusqueda[0].id
-                                            );
-                                            idSinodal2 = val;
-                                            let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal2})`;
-                                            connection.query(
+                                          }else{
+                                              //Como creamos al profesor, insertamos directamente en la tabla de sinodal protocolo
+                                              let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal2}')`;
+                                              connection.query(
                                               sql_insert_sinodal_protocolo2,
                                               (
                                                 errSinodal,
@@ -1915,18 +1823,12 @@ app.post("/protocolos", (req, res)=>{
                                                 }
                                               }
                                             );
-                                          } else {
-                                            console.log(errBID.message);
-                                            errores = 1;
                                           }
-                                        }
-                                      );
+                                        });
                                     } else {
-                                      let val = parseInt(idProfe[0].id);
-                                      //console.log(val);
-                                      //idSinodal.push(parseInt(idProfe[0].id));
-                                      idSinodal2 = val;
-                                      let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal2})`;
+                                      idSinodal2 = idProfe[0].uid;
+                                      //INSERTAMOS EN LA TABLA DE sinodal_protocolo
+                                      let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal2}')`;
                                       connection.query(
                                         sql_insert_sinodal_protocolo2,
                                         (errSinodal, resultSinodal) => {
@@ -1939,255 +1841,156 @@ app.post("/protocolos", (req, res)=>{
                                         }
                                       );
                                     }
-                                  } else {
-                                    console.log(errorSPS2.message);
-                                    errores = 1;
                                   }
                                 }
                               );
                             }
+
                             if (longSino == 3) {
-                              let sql_select_profesor_sinodal1 = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
-                              connection.query(
-                                sql_select_profesor_sinodal1,
-                                (errorSPS1, resultSPS1) => {
-                                  //no tenemos error
-                                  if (!errorSPS1) {
-                                    let idProfe = 0;
-                                    idProfe = JSON.parse(
-                                      JSON.stringify(resultSPS1)
-                                    );
-                                    if (
-                                      Object.keys(idProfe).length === 0
-                                    ) {
-                                      //no encontramos nada, insertamos
-                                      let sql_insert_profesor_sinodal1 = `INSERT INTO PROFESOR(nombre, apellidoPaterno, apellidoMaterno) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}')`;
-                                      connection.query(
-                                        sql_insert_profesor_sinodal1,
-                                        (errSino1, resultSino1) => {
-                                          if (errSino1) {
-                                            console.log(
-                                              "ERROR SINO 1 " +
-                                                errSino1.message
-                                            );
-                                            errores = 1;
-                                          }
+                              let sql_select_profesorUsuario = `SELECT uid FROM profesorusuario Where nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
+                              connection.query(sql_select_profesorUsuario, (erroSino1, resultSino1)=>{
+                                if(!erroSino1){
+                                  let consultaID =  JSON.parse(JSON.stringify(resultSino1));
+                                  if(Object.keys(consultaID).length ===0){
+                                    //console.log("NO SE ENCUENTRA EL NUMERO DE PROFESOR");   insertamos en el profesor usuario
+                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3];
+                                    let sql_insert_profesorUsuario = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}', '${idSinodal1}')`;
+                                    connection.query(sql_insert_profesorUsuario, (errorSino, resultSino)=>{
+                                      if(errorSino){
+                                        console.log("Error al crear el profesor usuario");
+                                      }else{
+                                        //como creamos al profesor, insertamos directamente en la tabla de sinodal protocolo
+                                        let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal1}')`;
+                                          connection.query(
+                                            sql_insert_sinodal_protocolo1,
+                                            (errSinodal,resultSinodal) => {
+                                              if (errSinodal) {
+                                                console.log(
+                                                  "error SINO 1,2 " +
+                                                    errSinodal.message
+                                                );
+                                                errores = 1;
+                                              }
+                                            }
+                                          );
+                                        
+                                      }
+                                    });
+                          
+                                  }else{
+                                    idSinodal1 = consultaID[0].uid;
+                                    //console.log("ECONTRAMOS AL USUARIO", idSinodal1)
+                                    //INSERTAMOS EN LA TABLA DE sinodal_protocolo
+                                    let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal1}')`;
+                                    connection.query(
+                                      sql_insert_sinodal_protocolo1,
+                                      (
+                                        errSinodal,
+                                        resultSinodal
+                                      ) => {
+                                        if (errSinodal) {
+                                          console.log(
+                                            "error SINO 1,2 " +
+                                              errSinodal.message
+                                          );
+                                          errores = 1;
                                         }
-                                      );
-                                      let sql_select_profesor_sinodal1_creado = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
-                                      connection.query(
-                                        sql_select_profesor_sinodal1_creado,
-                                        (errBID, resultBID) => {
-                                          if (!errBID) {
-                                            let idBusqueda = JSON.parse(
-                                              JSON.stringify(resultBID)
-                                            );
-                                            let val = parseInt(
-                                              idBusqueda[0].id
-                                            );
-                                            idSinodal1 = val;
-                                            let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal1})`;
-                                            connection.query(
-                                              sql_insert_sinodal_protocolo1,
+                                      }
+                                    );
+                                  }
+                                  
+                                  
+                                }
+                              });
+                              //SEGUNDO SINODAL
+                              let sql_select_profesorUsuario_sino2 = `SELECT uid FROM profesorusuario WHERE nombre = '${sino2[0]}' AND apellidoPaterno = '${sino2[1]}' AND apellidoMaterno = '${sino2[2]}'`;
+                              connection.query(
+                                  sql_select_profesorUsuario_sino2,
+                                  (errorSPS2, resultSPS2) => {
+                                  //no tenemos error
+                                  if (!errorSPS2) {
+                                      let idProfe = 0;
+                                      idProfe = JSON.parse(JSON.stringify(resultSPS2));
+                                      if (Object.keys(idProfe).length === 0) {
+                                      //no encontramos nada, insertamos
+                                      idSinodal2 = sino2[1][0]+sino2[1][1]+sino2[1][2]+sino2[1][3];//clave
+                                      let sql_insert_profesorUsuario_sinodal2 = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino2[0]}', '${sino2[1]}', '${sino2[2]}', '${idSinodal2}')`;
+                                      connection.query(sql_insert_profesorUsuario_sinodal2,(errSino2, resultSino2) => {
+                                          if (errSino2) {
+                                              console.log(errSino2.message);
+                                              errores = 1;
+                                          }else{
+                                              //Como creamos al profesor, insertamos directamente en la tabla de sinodal protocolo
+                                              let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal2}')`;
+                                              connection.query(
+                                              sql_insert_sinodal_protocolo2,
                                               (
-                                                errSinodal,
-                                                resultSinodal
+                                                  errSinodal,
+                                                  resultSinodal
                                               ) => {
-                                                if (errSinodal) {
+                                                  if (errSinodal) {
                                                   console.log(
-                                                    "error SINO 1,2 " +
                                                       errSinodal.message
                                                   );
                                                   errores = 1;
-                                                }
+                                                  }
                                               }
-                                            );
-                                          } else {
-                                            console.log(
-                                              "ERROR SINO 1,3 " +
-                                                errBID.message
-                                            );
-                                            errores = 1;
+                                              );
                                           }
-                                        }
-                                      );
-                                    } else {
-                                      let val = parseInt(idProfe[0].id);
-                                      //idSinodal.push(parseInt(idProfe[0].id));
-                                      //console.log(val);
-                                      idSinodal1 = val;
-                                      let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal1})`;
-                                      //console.log(sql_insert_sinodal_tesis1);
+                                          });
+                                      } else {
+                                      idSinodal2 = idProfe[0].uid;
+                                      //INSERTAMOS EN LA TABLA DE sinodal_protocolo
+                                      let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal2}')`;
                                       connection.query(
-                                        sql_insert_sinodal_protocolo1,
-                                        (errSinodal, resultSinodal) => {
+                                          sql_insert_sinodal_protocolo2,
+                                          (errSinodal, resultSinodal) => {
                                           if (errSinodal) {
-                                            console.log(
-                                              "error sino1,4 " +
-                                                errSinodal.message
-                                            );
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
-                                    }
-                                  } else {
-                                    console.log(
-                                      "error sino 1,5 " +
-                                        errorSPS1.message
-                                    );
-                                    errores = 1;
-                                  }
-                                }
-                              );
-                              let sql_select_profesor_sinodal2 = `SELECT id FROM profesor WHERE nombre = '${sino2[0]}' AND apellidoPaterno = '${sino2[1]}' AND apellidoMaterno = '${sino2[2]}'`;
-                              connection.query(
-                                sql_select_profesor_sinodal2,
-                                (errorSPS2, resultSPS2) => {
-                                  //no tenemos error
-                                  if (!errorSPS2) {
-                                    let idProfe = 0;
-                                    idProfe = JSON.parse(
-                                      JSON.stringify(resultSPS2)
-                                    );
-                                    if (
-                                      Object.keys(idProfe).length === 0
-                                    ) {
-                                      //no encontramos nada, insertamos
-                                      let sql_insert_profesor_sinodal2 = `INSERT INTO PROFESOR(nombre, apellidoPaterno, apellidoMaterno) VALUES ('${sino2[0]}', '${sino2[1]}', '${sino2[2]}')`;
-                                      connection.query(
-                                        sql_insert_profesor_sinodal2,
-                                        (errSino2, resultSino2) => {
-                                          if (errSino2) {
-                                            console.log(
-                                              errSino2.message
-                                            );
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
-                                      let sql_select_profesor_sinodal2_creado = `SELECT id FROM profesor WHERE nombre = '${sino2[0]}' AND apellidoPaterno = '${sino2[1]}' AND apellidoMaterno = '${sino2[2]}'`;
-                                      connection.query(
-                                        sql_select_profesor_sinodal2_creado,
-                                        (errBID, resultBID) => {
-                                          if (!errBID) {
-                                            let idBusqueda = JSON.parse(
-                                              JSON.stringify(resultBID)
-                                            );
-                                            let val = parseInt(
-                                              idBusqueda[0].id
-                                            );
-                                            idSinodal2 = val;
-                                            let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal2})`;
-                                            connection.query(
-                                              sql_insert_sinodal_protocolo2,
-                                              (
-                                                errSinodal,
-                                                resultSinodal
-                                              ) => {
-                                                if (errSinodal) {
-                                                  console.log(
-                                                    errSinodal.message
-                                                  );
-                                                  errores = 1;
-                                                }
-                                              }
-                                            );
-                                          } else {
-                                            console.log(errBID.message);
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
-                                    } else {
-                                      let val = parseInt(idProfe[0].id);
-                                      //console.log(val);
-                                      //idSinodal.push(parseInt(idProfe[0].id));
-                                      idSinodal2 = val;
-                                      let sql_insert_sinodal_protocolo2 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal2})`;
-                                      connection.query(
-                                        sql_insert_sinodal_protocolo2,
-                                        (errSinodal, resultSinodal) => {
-                                          if (errSinodal) {
-                                            console.log(
+                                              console.log(
                                               errSinodal.message
-                                            );
-                                            errores = 1;
+                                              );
+                                              errores = 1;
                                           }
-                                        }
+                                          }
                                       );
-                                    }
-                                  } else {
-                                    console.log(errorSPS2.message);
-                                    errores = 1;
+                                      }
                                   }
-                                }
+                                  }
                               );
-                              let sql_select_profesor_sinodal3 = `SELECT id FROM profesor WHERE nombre = '${sino3[0]}' AND apellidoPaterno = '${sino3[1]}' AND apellidoMaterno = '${sino3[2]}'`;
+                          
+                              //TERCER SINODAL
+                              let sql_select_profesorUsuario_sino3 = `SELECT uid FROM profesorusuario WHERE nombre = '${sino3[0]}' AND apellidoPaterno = '${sino3[1]}' AND apellidoMaterno = '${sino3[2]}'`;
                               connection.query(
-                                sql_select_profesor_sinodal3,
+                                  sql_select_profesorUsuario_sino3,
                                 (errorSPS3, resultSPS3) => {
                                   //no tenemos error
                                   if (!errorSPS3) {
                                     let idProfe = 0;
-                                    idProfe = JSON.parse(
-                                      JSON.stringify(resultSPS3)
-                                    );
-                                    if (
-                                      Object.keys(idProfe).length === 0
-                                    ) {
+                                    idProfe = JSON.parse(JSON.stringify(resultSPS3));
+                                    if (Object.keys(idProfe).length === 0) {
                                       //no encontramos nada, insertamos
-                                      let sql_insert_profesor_sinodal3 = `INSERT INTO PROFESOR(nombre, apellidoPaterno, apellidoMaterno) VALUES ('${sino3[0]}', '${sino3[1]}', '${sino3[2]}')`;
-                                      connection.query(
-                                        sql_insert_profesor_sinodal3,
-                                        (errSino3, resultSino3) => {
+                                      idSinodal3 = sino3[1][0]+sino3[1][1]+sino3[1][2]+sino3[1][3];
+                                      let sql_insert_profesorUsuario_sinodal3 = `INSERT INTO profesorusuario (nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino3[0]}', '${sino3[1]}', '${sino3[2]}', '${idSinodal3}')`;
+                                      connection.query(sql_insert_profesorUsuario_sinodal3,(errSino3, resultSino3) => {
                                           if (errSino3) {
-                                            console.log(
-                                              errSino3.message
-                                            );
+                                            console.log(errSino3.message);
                                             errores = 1;
+                                          }else{
+                                              //Como creamos al profesor, insertamos directamente en la tabla de sinodal protocolo
+                                              let sql_insert_sinodal_protocolo3 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal3}')`;
+                                              connection.query(sql_insert_sinodal_protocolo3, (errSinodal3, resultSinodal3)=>{
+                                                  if(errSinodal3){
+                                                      console.log(errSinodal3.message);
+                                                      errores = 1;
+                                                  }
+                                              });
                                           }
-                                        }
-                                      );
-                                      let sql_select_profesor_sinodal3_creado = `SELECT id FROM profesor WHERE nombre = '${sino3[0]}' AND apellidoPaterno = '${sino3[1]}' AND apellidoMaterno = '${sino3[2]}'`;
-                                      connection.query(
-                                        sql_select_profesor_sinodal3_creado,
-                                        (errBID, resultBID) => {
-                                          if (!errBID) {
-                                            let idBusqueda = JSON.parse(
-                                              JSON.stringify(resultBID)
-                                            );
-                                            let val = parseInt(
-                                              idBusqueda[0].id
-                                            );
-                                            idSinodal3 = val;
-                                            let sql_insert_sinodal_protocolo3 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal3})`;
-                                            connection.query(
-                                              sql_insert_sinodal_protocolo3,
-                                              (
-                                                errSinodal,
-                                                resultSinodal
-                                              ) => {
-                                                if (errSinodal) {
-                                                  console.log(
-                                                    errSinodal.message
-                                                  );
-                                                  errores = 1;
-                                                }
-                                              }
-                                            );
-                                          } else {
-                                            console.log(errBID.message);
-                                            errores = 1;
-                                          }
-                                        }
-                                      );
+                                      });
+                                    
                                     } else {
-                                      let val = parseInt(idProfe[0].id);
-                                      //console.log(val);
-                                      //idSinodal.push(parseInt(idProfe[0].id));
-                                      idSinodal3 = val;
-                                      let sql_insert_sinodal_protocolo3 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal3})`;
+                                      idSinodal3 = idProfe[0].uid;
+                                      //INSERTAMOS EN LA TABLA DE sinodal_protocolo
+                                      let sql_insert_sinodal_protocolo3 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, '${idSinodal3}')`;
                                       connection.query(
                                         sql_insert_sinodal_protocolo3,
                                         (errSinodal, resultSinodal) => {
@@ -2200,14 +2003,6 @@ app.post("/protocolos", (req, res)=>{
                                         }
                                       );
                                     }
-                                  } else {
-                                    console.log(errorSPS3.message);
-                                    res.json({
-                                      status: "500",
-                                      message:
-                                        "Error al buscar el id del profesor",
-                                    });
-                                    errores = 1;
                                   }
                                 }
                               );
@@ -2333,3 +2128,101 @@ app.listen(3000, function () {
 app.use(function (req, res) {
   res.status(404).send("Error");
 });
+
+/*
+//console.log("ESTA LLENO EL 1");
+let sql_select_profesor_sinodal1 = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
+connection.query(
+  sql_select_profesor_sinodal1,
+  (errorSPS1, resultSPS1) => {
+    //no tenemos error
+    if (!errorSPS1) {
+      let idProfe = 0;
+      idProfe = JSON.parse(
+        JSON.stringify(resultSPS1)
+      );
+      if (
+        Object.keys(idProfe).length === 0
+      ) {
+        //no encontramos nada, insertamos
+        let sql_insert_profesor_sinodal1 = `INSERT INTO PROFESOR(nombre, apellidoPaterno, apellidoMaterno) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}')`;
+        connection.query(
+          sql_insert_profesor_sinodal1,
+          (errSino1, resultSino1) => {
+            if (errSino1) {
+              console.log(
+                "ERROR SINO 1 " +
+                  errSino1.message
+              );
+              errores = 1;
+            }
+          }
+        );
+        let sql_select_profesor_sinodal1_creado = `SELECT id FROM profesor WHERE nombre = '${sino1[0]}' AND apellidoPaterno = '${sino1[1]}' AND apellidoMaterno = '${sino1[2]}'`;
+        connection.query(
+          sql_select_profesor_sinodal1_creado,
+          (errBID, resultBID) => {
+            if (!errBID) {
+              let idBusqueda = JSON.parse(
+                JSON.stringify(resultBID)
+              );
+              let val = parseInt(
+                idBusqueda[0].id
+              );
+              idSinodal1 = val;
+              let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idProto}, ${idSinodal1})`;
+              connection.query(
+                sql_insert_sinodal_protocolo1,
+                (
+                  errSinodal,
+                  resultSinodal
+                ) => {
+                  if (errSinodal) {
+                    console.log(
+                      "error SINO 1,2 " +
+                        errSinodal.message
+                    );
+                    errores = 1;
+                  }
+                }
+              );
+            } else {
+              console.log(
+                "ERROR SINO 1,3 " +
+                  errBID.message
+              );
+              errores = 1;
+            }
+          }
+        );
+      } else {
+        let val = parseInt(idProfe[0].id);
+        //idSinodal.push(parseInt(idProfe[0].id));
+        //console.log(val);
+        idSinodal1 = val;
+        let sql_insert_sinodal_protocolo1 = `INSERT INTO sinodal_protocolo (fk_protocolo, fk_sinodal) VALUES (${idTesis}, ${idSinodal1})`;
+        //console.log(sql_insert_sinodal_tesis1);
+        connection.query(
+          sql_insert_sinodal_protocolo1,
+          (errSinodal, resultSinodal) => {
+            if (errSinodal) {
+              console.log(
+                "error sino1,4 " +
+                  errSinodal.message
+              );
+              errores = 1;
+            }
+          }
+        );
+      }
+    } else {
+      console.log(
+        "error sino 1,5 " +
+          errorSPS1.message
+      );
+      errores = 1;
+    }
+  }
+);
+
+*/
