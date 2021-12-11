@@ -120,7 +120,7 @@ export class RegistradorPropuestasComponent implements OnInit {
       }),//Inicio de los directores
       new Pregunta<string>({
         key: 'Director1Nombre',
-        label: 'Mombre del primer director',
+        label: 'Nombre del primer director',
         type: 'text',
         required: true,
         controlType: 'text',
@@ -144,7 +144,7 @@ export class RegistradorPropuestasComponent implements OnInit {
       }),//Segundo director
       new Pregunta<string>({
         key: 'Director2Nombre',
-        label: 'Mombre del segundo director',
+        label: 'Nombre del segundo director',
         type: 'text',
         required: false,
         controlType: 'text',
