@@ -2016,7 +2016,7 @@ app.post("/protocolos", (req, res)=>{
                                   let registro = parseInt(resultSelectAutor2[0].registro);
                                   if(registro > 0){
                                     console.log(resultSelectAutor2);
-                                    cont = 1 + cont;
+                                    //cont = 1 + cont;
                                     errores = 1;
                                   }else{
                                     connection.query(
@@ -2043,7 +2043,7 @@ app.post("/protocolos", (req, res)=>{
                                   let registro = parseInt(resultSelectAutor2[0].registro);
                                   if(registro > 0){
                                     console.log(resultSelectAutor2);
-                                    cont = 1 + cont;
+                                    //cont = 1 + cont;
                                     errores = 1;
                                   }else{
                                     connection.query(
@@ -2064,7 +2064,7 @@ app.post("/protocolos", (req, res)=>{
                                 if(!errorSelectAutor3){
                                   let registro = parseInt(resultSelectAutor3[0].registro);
                                   if(registro > 0){
-                                    cont = 1 + cont;
+                                    //cont = 1 + cont;
                                     errores = 1;
                                   }else{
                                     connection.query(
