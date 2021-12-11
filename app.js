@@ -1681,7 +1681,7 @@ app.post("/protocolos", (req, res)=>{
                                   let consultaID =  JSON.parse(JSON.stringify(resultSino1));
                                   if(Object.keys(consultaID).length ===0){
                                     //console.log("NO SE ENCUENTRA EL NUMERO DE PROFESOR");   insertamos en el profesor usuario
-                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3];
+                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3]+''+Math.floor(Math.random()*100+0);
                                     let sql_insert_profesorUsuario = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}', '${idSinodal1}')`;
                                     connection.query(sql_insert_profesorUsuario, (errorSino, resultSino)=>{
                                       if(errorSino){
@@ -1740,7 +1740,7 @@ app.post("/protocolos", (req, res)=>{
                                   let consultaID =  JSON.parse(JSON.stringify(resultSino1));
                                   if(Object.keys(consultaID).length ===0){
                                     //console.log("NO SE ENCUENTRA EL NUMERO DE PROFESOR");   insertamos en el profesor usuario
-                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3];
+                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3]+''+Math.floor(Math.random()*100+0);
                                     let sql_insert_profesorUsuario = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}', '${idSinodal1}')`;
                                     connection.query(sql_insert_profesorUsuario, (errorSino, resultSino)=>{
                                       if(errorSino){
@@ -1800,7 +1800,7 @@ app.post("/protocolos", (req, res)=>{
                                     idProfe = JSON.parse(JSON.stringify(resultSPS2));
                                     if (Object.keys(idProfe).length === 0) {
                                       //no encontramos nada, insertamos
-                                      idSinodal2 = sino2[1][0]+sino2[1][1]+sino2[1][2]+sino2[1][3];//clave
+                                      idSinodal2 = sino2[1][0]+sino2[1][1]+sino2[1][2]+sino2[1][3]+''+Math.floor(Math.random()*100+0);//clave
                                       let sql_insert_profesorUsuario_sinodal2 = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino2[0]}', '${sino2[1]}', '${sino2[2]}', '${idSinodal2}')`;
                                       connection.query(sql_insert_profesorUsuario_sinodal2,(errSino2, resultSino2) => {
                                           if (errSino2) {
@@ -1853,7 +1853,7 @@ app.post("/protocolos", (req, res)=>{
                                   let consultaID =  JSON.parse(JSON.stringify(resultSino1));
                                   if(Object.keys(consultaID).length ===0){
                                     //console.log("NO SE ENCUENTRA EL NUMERO DE PROFESOR");   insertamos en el profesor usuario
-                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3];
+                                    idSinodal1 = sino1[1][0]+sino1[1][1]+sino1[1][2]+sino1[1][3]+''+Math.floor(Math.random()*100+0);
                                     let sql_insert_profesorUsuario = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino1[0]}', '${sino1[1]}', '${sino1[2]}', '${idSinodal1}')`;
                                     connection.query(sql_insert_profesorUsuario, (errorSino, resultSino)=>{
                                       if(errorSino){
@@ -1913,7 +1913,7 @@ app.post("/protocolos", (req, res)=>{
                                       idProfe = JSON.parse(JSON.stringify(resultSPS2));
                                       if (Object.keys(idProfe).length === 0) {
                                       //no encontramos nada, insertamos
-                                      idSinodal2 = sino2[1][0]+sino2[1][1]+sino2[1][2]+sino2[1][3];//clave
+                                      idSinodal2 = sino2[1][0]+sino2[1][1]+sino2[1][2]+sino2[1][3]+''+Math.floor(Math.random()*100+0);//clave
                                       let sql_insert_profesorUsuario_sinodal2 = `INSERT INTO profesorusuario(nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino2[0]}', '${sino2[1]}', '${sino2[2]}', '${idSinodal2}')`;
                                       connection.query(sql_insert_profesorUsuario_sinodal2,(errSino2, resultSino2) => {
                                           if (errSino2) {
@@ -1969,7 +1969,7 @@ app.post("/protocolos", (req, res)=>{
                                     idProfe = JSON.parse(JSON.stringify(resultSPS3));
                                     if (Object.keys(idProfe).length === 0) {
                                       //no encontramos nada, insertamos
-                                      idSinodal3 = sino3[1][0]+sino3[1][1]+sino3[1][2]+sino3[1][3];
+                                      idSinodal3 = sino3[1][0]+sino3[1][1]+sino3[1][2]+sino3[1][3]+''+Math.floor(Math.random()*100+0);
                                       let sql_insert_profesorUsuario_sinodal3 = `INSERT INTO profesorusuario (nombre, apellidoPaterno, apellidoMaterno, uid) VALUES ('${sino3[0]}', '${sino3[1]}', '${sino3[2]}', '${idSinodal3}')`;
                                       connection.query(sql_insert_profesorUsuario_sinodal3,(errSino3, resultSino3) => {
                                           if (errSino3) {
@@ -2081,8 +2081,16 @@ app.post("/protocolos", (req, res)=>{
                                 }
                               });
                             }
-                          
-                          
+                            //Inserción en la tabla de version
+                            let sql_insert_version_protocolo = `INSERT INTO version (fecha, fk_protocolo, enlace) VALUES ('${fechaActual}', ${idProto}, '${enlace}')`;
+                            connection.query(sql_insert_version_protocolo, (errorInsertVersion, resultInsertVersion)=>{
+                              if(errorInsertVersion){
+                                console.log(errorInsertVersion.message);
+                                errores = 1;
+                              }else{
+                                console.log("CREACIÓN CORRECTA - VERSION");
+                              }
+                            })
                             if (errores == 1) {
                               res.json({
                                 status: "400",
